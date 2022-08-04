@@ -1,5 +1,5 @@
 <script lang="ts">
-export const mode = "client-only";
+export const mode = "server-and-client";
 export const title = "Home";
 </script>
 
@@ -12,10 +12,11 @@ function two() {
 </script>
 
 <template>
-  <div class="bg-red-500">Hello world!</div>
+  <div class="bg-blue-200">Hello world!</div>
   <div>{{ count }} {{ count + 1 }}</div>
   <button @click="count += 1">+1</button>
   <button @click="two">+2</button>
   <MyTest></MyTest>
   <IconHero24ArrowRight/>
+  <VectorLogo/>
 </template>

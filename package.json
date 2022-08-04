@@ -5,7 +5,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview:render": "vite build && ts-node preview render",
-    "preview:static": "vite build && ts-node preview static"
+    "preview:static": "vite build && ts-node preview static",
+    "preview": "npm run preview:render"
   },
   "dependencies": {
     "vite-plugin-ssr": "^0.4.13",
@@ -28,6 +29,7 @@
     "unplugin-auto-import": "^0.10.2",
     "unplugin-icons": "^0.14.7",
     "unplugin-vue-components": "^0.21.2",
-    "vite": "^3.0.3"
+    "vite": "^3.0.3",
+    "vite-svg-loader": "^3.4.0"
   }
 }

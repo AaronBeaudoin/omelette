@@ -9,5 +9,6 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     IconHero24ArrowRight: typeof import('~icons/heroicons-outline/arrow-right')['default']
     MyTest: typeof import('./../components/Test.vue')['default']
+    VectorLogo: typeof import('./../assets/svgs/logo.svg?component')['default']
   }
 }
