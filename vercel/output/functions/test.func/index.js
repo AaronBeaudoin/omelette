@@ -5,7 +5,7 @@ import { renderPage } from "vite-plugin-ssr";
  * @param {import("@vercel/node").VercelResponse} response 
  */
 export default async function handler(request, response) {
-  console.log("[direct]");
+  console.log("[test]");
   console.log(request.method, request.url, request.httpVersion);
   console.log(JSON.stringify(request.query, null, 2));
   console.log(JSON.stringify(request.headers, null, 2));

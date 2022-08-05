@@ -3,6 +3,6 @@
   "routes": [
     { "handle": "filesystem" },
     { "src": "/direct/(.*)", "dest": "/direct" },
-    { "src": "/(.*)", "dest": "/default" }
+    { "src": "/default/(.*)", "dest": "/default" }
   ]
 }
