@@ -4,6 +4,5 @@ Still needed:
   - `@vueuse/core`
   - `lodash`
   - `xregexp`
-  - `pinia`
   - `vue-imask`
   - `date-fns`
