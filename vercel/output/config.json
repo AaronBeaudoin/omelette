@@ -2,7 +2,7 @@
   "version": 3,
   "routes": [
     { "handle": "filesystem" },
-    { "src": "/direct/(.*)", "dest": "/direct", "check": true },
-    { "src": "/(.*)", "dest": "/prerender", "check": true }
+    { "src": "^/direct(?:/(.*))$", "dest": "/direct", "check": true },
+    { "src": "^(?:/(.*))$", "dest": "/prerender", "check": true }
   ]
 }
