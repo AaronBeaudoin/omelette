@@ -34,8 +34,8 @@ cp -a dist/client/. .vercel/output/static
 # Bundle/compile render function entrypoints to single files.
 # (This ensures all dependencies are bundled into the file.)
 cd .vercel/output/functions
+npx ncc build --minify --out ./default.func default.func/index.js
 npx ncc build --minify --out ./direct.func direct.func/index.js
-npx ncc build --minify --out ./index.func index.func/index.js
 
 # ————————————————————————————————————————————————————————————————————————————————
 
