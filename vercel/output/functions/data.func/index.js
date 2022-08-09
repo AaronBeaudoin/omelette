@@ -5,7 +5,7 @@ import { renderPage } from "vite-plugin-ssr";
  * @param {import("@vercel/node").VercelResponse} response
  */
 export default async function handler(request, response) {
-  console.log("[direct]");
+  console.log("[default]");
   console.log(request.method, request.url, request.httpVersion);
   console.log(JSON.stringify(request.query, null, 2));
   console.log(JSON.stringify(request.headers, null, 2));
@@ -18,11 +18,10 @@ export default async function handler(request, response) {
   if (!httpResponse) {
     response.statusCode = 200;
     response.end();
-  } else {
-    const { body, statusCode, contentType } = httpResponse;
 
-    response.statusCode = statusCode;
-    response.setHeader("Content-Type", contentType);
-    response.end(body);
+  } else {
+    response.statusCode = httpResponse.statusCode;
+    response.setHeader("Content-Type", httpResponse.contentType);
+    response.end(httpResponse.body);
   }
 }

@@ -2,8 +2,8 @@
   "version": 3,
   "routes": [
     { "handle": "filesystem" },
-    { "src": "/direct/(.*)", "dest": "/direct" },
-    { "src": "/default/(.*)", "dest": "/default" },
-    { "src": "/edge/(.*)", "dest": "/edge" }
+    { "src": "/data", "dest": "/data" },
+    { "src": "/refresh", "dest": "/refresh" },
+    { "src": "/(.*)", "dest": "/default" }
   ]
 }

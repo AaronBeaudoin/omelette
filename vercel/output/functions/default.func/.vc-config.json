@@ -1,6 +1,4 @@
 {
-  "runtime": "nodejs14.x",
-  "handler": "index.js",
-  "launcherType": "Nodejs",
-  "shouldAddHelpers": true
+  "runtime": "edge",
+  "entrypoint": "index.js"
 }
