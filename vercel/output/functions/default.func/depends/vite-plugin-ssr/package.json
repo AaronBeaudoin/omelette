@@ -1,0 +1,106 @@
+{
+  "name": "vite-plugin-ssr",
+  "version": "0.4.18",
+  "dependencies": {
+    "@brillout/debug": "^0.1.1",
+    "@brillout/json-s": "^0.4.6",
+    "@brillout/libassert": "^0.5.8",
+    "cac": "^6.7.12",
+    "es-module-lexer": "^0.10.5",
+    "fast-glob": "^3.2.11",
+    "kolorist": "^1.5.1",
+    "p-limit": "^3.1.0",
+    "picocolors": "^1.0.0",
+    "resolve": "^1.22.0",
+    "symlink-dir": "^5.0.1",
+    "vite-plugin-dist-importer": "^0.3.2",
+    "vite-plugin-glob": "0.2.8"
+  },
+  "scripts": {
+    "build": "rimraf dist/ && tsc -b",
+    "dev": "pnpm run dev:slow",
+    "dev:node": "pnpm run tsc:watch:node",
+    "// `dev:fast` and `dev:slow` achieve the same, but `dev:fast` is much faster": "",
+    "dev:slow": "tsc --b --watch",
+    "dev:fast": "pnpm run tsc:watch:node & pnpm run tsc:watch:client",
+    "tsc:watch:node": "tsc --incremental --watch --project ./node/tsconfig.json",
+    "tsc:watch:client": "tsc --incremental --watch --project ./client/tsconfig.json"
+  },
+  "devDependencies": {
+    "@brillout/part-regex": "^0.1.2",
+    "@types/jest": "^27.4.1",
+    "@types/node": "17.0.31",
+    "@types/resolve": "^1.20.2",
+    "rollup": "^2.71.1",
+    "typescript": "4.6.4",
+    "rimraf": "^3.0.2",
+    "vite": "^2.9.14"
+  },
+  "peerDependencies": {
+    "vite": ">=2.9.10"
+  },
+  "engines": {
+    "node": ">=12.19.0"
+  },
+  "main": "./dist/cjs/node/index.js",
+  "exports": {
+    ".": {
+      "worker": "./dist/cjs/node/index.js",
+      "node": "./dist/cjs/node/index.js",
+      "browser": "./dist/esm/client/node.js"
+    },
+    "./client": {
+      "browser": "./dist/esm/client/index.js"
+    },
+    "./client/router": {
+      "worker": "./dist/cjs/node/client/router.js",
+      "node": "./dist/cjs/node/client/router.js",
+      "browser": "./dist/esm/client/router/index.js"
+    },
+    "./cli": {
+      "node": "./dist/cjs/node/cli/index.js"
+    },
+    "./prerender": {
+      "node": "./dist/cjs/node/prerender.js"
+    },
+    "./plugin": {
+      "node": "./dist/cjs/node/plugin/index.js"
+    },
+    "./__internal": {
+      "node": "./dist/cjs/__internal/index.js"
+    },
+    "./__internal/setup": {
+      "node": "./dist/cjs/node/page-files/setup.js"
+    }
+  },
+  "files": [
+    "dist/cjs/",
+    "dist/esm/",
+    "cli.js",
+    "cli.d.ts",
+    "client.js",
+    "client.d.ts",
+    "client/router.js",
+    "client/router.d.ts",
+    "plugin.js",
+    "plugin.d.ts",
+    "prerender.js",
+    "prerender.d.ts",
+    "__internal.js",
+    "__internal.d.ts",
+    "__internal/setup.js",
+    "__internal/setup.d.ts",
+    "types.d.ts"
+  ],
+  "bin": {
+    "vite-plugin-ssr": "./node/bin/vite-plugin-ssr.js"
+  },
+  "description": "Like Next.js/Nuxt but as do-one-thing-do-it-well Vite plugin.",
+  "repository": "https://github.com/brillout/vite-plugin-ssr",
+  "license": "MIT",
+  "keywords": [
+    "vite",
+    "vite-plugin",
+    "ssr"
+  ]
+}

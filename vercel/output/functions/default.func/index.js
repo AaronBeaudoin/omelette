@@ -1,4 +1,4 @@
-import { renderPage } from "vite-plugin-ssr";
+import { renderPage } from "./depends/vite-plugin-ssr";
 
 /**
  * @param {Request} request

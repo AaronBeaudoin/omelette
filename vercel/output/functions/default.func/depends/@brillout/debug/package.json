@@ -1,0 +1,40 @@
+{
+  "name": "@brillout/debug",
+  "version": "0.1.1",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js"
+    }
+  },
+  "scripts": {
+    "// === Dev ===": "",
+    "dev": "pnpm run tsc:watch:cjs",
+    "// === Build ===": "",
+    "build": "pnpm run clean && pnpm run tsc:esm && pnpm run tsc:cjs",
+    "tsc:esm": "tsc",
+    "tsc:cjs": "tsc --project ./tsconfig.cjs.json",
+    "tsc:watch:esm": "tsc --incremental --watch",
+    "tsc:watch:cjs": "tsc --incremental --watch --project ./tsconfig.cjs.json",
+    "clean": "rm -rf dist/",
+    "// === Release ===": "",
+    "prepublishOnly": "pnpm run build",
+    "postpublish": " git push && git push --tags",
+    "release": "npm version patch && npm publish"
+  },
+  "devDependencies": {
+    "@types/node": "17.0.13",
+    "typescript": "^4.5.5"
+  },
+  "files": [
+    "dist/",
+    "*.d.ts",
+    "*.js"
+  ],
+  "repository": "github:brillout/debug",
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "name": "rename-overwrite",
+  "version": "4.0.2",
+  "description": "Like `fs.rename` but overwrites existing file or directory",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "index.d.ts"
+  ],
+  "engines": {
+    "node": ">=12.10"
+  },
+  "repository": "https://github.com/zkochan/packages/tree/main/rename-overwrite",
+  "keywords": [
+    "rename",
+    "move",
+    "fs"
+  ],
+  "author": {
+    "name": "Zoltan Kochan",
+    "email": "z@kochan.io",
+    "url": "https://www.kochan.io"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/zkochan/packages/tree/main/rename-overwrite#readme",
+  "dependenciesMeta": {
+    "rename-overwrite": {
+      "injected": true
+    }
+  },
+  "devDependencies": {
+    "load-json-file": "6.2.0",
+    "rename-overwrite": "link:",
+    "standard": "^16.0.4",
+    "symlink-dir": "^5.0.1",
+    "tape": "^5.3.2",
+    "tempy": "^1.0.1",
+    "write-json-file": "^4.3.0"
+  },
+  "dependencies": {
+    "@zkochan/rimraf": "^2.1.2"
+  },
+  "scripts": {
+    "test": "standard && node test"
+  },
+  "readme": "# rename-overwrite\n\n> Like `fs.rename` but overwrites existing file or directory\n\n## Install\n\nInstall it via npm.\n\n```\n<npm|yarn|pnpm> add rename-overwrite\n```\n\n## Usage\n\n```js\nconst renameOverwrite = require('rename-overwrite')\n\nrenameOverwrite('old-dir-name', 'new-dir-name')\n  .then(() => console.log('done'))\n  .catch(err => console.log(err))\n```\n\n## API\n\n### `renameOverwrite(oldPath, newPath) => Promise<void>`\n\nRenames a file or directory asynchronously. Overwrites existing file or directory.\n\n### `renameOverwrite.sync(oldPath, newPath)`\n\nRenames a file or directory synchronously. Overwrites existing file or directory.\n\n## License\n\n[MIT](LICENSE)\n"
+}
