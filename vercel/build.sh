@@ -18,7 +18,7 @@ npm run build
 # Remove existing `.vercel/` directory (if applicable).
 # Create a new `.vercel/` directory.
 rm -rf .vercel
-mkdir -p .vercel/output
+mkdir -p .vercel/output/static
 
 # ————————————————————————————————————————————————————————————————————————————————
 
@@ -32,7 +32,7 @@ cp -a dist/client/. .vercel/output/static
 
 # 4. COMPILE
 # Bundle/compile serverless/edge function entrypoints.
-node $(dirname ${BASH_SOURCE[0]})/bundle-default.mjs
+node $(dirname ${BASH_SOURCE[0]})/bundle-render.mjs
 node $(dirname ${BASH_SOURCE[0]})/bundle-data.mjs
 
 # ————————————————————————————————————————————————————————————————————————————————
