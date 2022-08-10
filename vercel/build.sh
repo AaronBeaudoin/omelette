@@ -33,9 +33,8 @@ cp -a dist/client/. .vercel/output/static
 # 4. COMPILE
 # Bundle/compile function entrypoints to a single files.
 # (This ensures all dependencies are bundled into the file.)
-cd .vercel/output/functions
-npx build-worker --entry default.func/index.js --out default.func/bundle.js
-npx ncc build --minify --out ./data.func data.func/index.js
+node $(dirname ${BASH_SOURCE[0]})/bundle-default.mjs
+bash $(dirname ${BASH_SOURCE[0]})/bundle-data.sh
 
 # ————————————————————————————————————————————————————————————————————————————————
 
