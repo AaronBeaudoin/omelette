@@ -31,10 +31,9 @@ cp -a dist/client/. .vercel/output/static
 # ————————————————————————————————————————————————————————————————————————————————
 
 # 4. COMPILE
-# Bundle/compile function entrypoints to a single files.
-# (This ensures all dependencies are bundled into the file.)
+# Bundle/compile serverless/edge function entrypoints.
 node $(dirname ${BASH_SOURCE[0]})/bundle-default.mjs
-bash $(dirname ${BASH_SOURCE[0]})/bundle-data.sh
+node $(dirname ${BASH_SOURCE[0]})/bundle-data.mjs
 
 # ————————————————————————————————————————————————————————————————————————————————
 
