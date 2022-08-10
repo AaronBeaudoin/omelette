@@ -31,10 +31,10 @@ cp -a dist/client/. .vercel/output/static
 # ————————————————————————————————————————————————————————————————————————————————
 
 # 4. COMPILE
-# Bundle/compile data function entrypoint to a single file.
+# Bundle/compile function entrypoints to a single files.
 # (This ensures all dependencies are bundled into the file.)
 cd .vercel/output/functions
-npx ncc build --minify --out ./default.func default.func/index.js
+npx build-worker --entry default.func/index.js --out default.func/bundle.js
 npx ncc build --minify --out ./data.func data.func/index.js
 
 # ————————————————————————————————————————————————————————————————————————————————
