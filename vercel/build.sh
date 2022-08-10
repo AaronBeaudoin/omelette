@@ -1,5 +1,5 @@
 #!/bin/bash
-# Deploys to Vercel with the Vercel Build Output API.
+# Build a Vercel deployment using the Build Output API.
 # https://vercel.com/docs/build-output-api/v3
 
 # Feel free to run this script locally to see how it works.
@@ -18,7 +18,7 @@ npm run build
 # Remove existing `.vercel/` directory (if applicable).
 # Create a new `.vercel/` directory.
 rm -rf .vercel
-mkdir -p .vercel/output/static
+mkdir .vercel
 
 # ————————————————————————————————————————————————————————————————————————————————
 

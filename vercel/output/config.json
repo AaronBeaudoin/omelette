@@ -4,6 +4,6 @@
     { "handle": "filesystem" },
     { "src": "/data", "dest": "/data" },
     { "src": "/refresh", "dest": "/refresh" },
-    { "src": "/(.*)", "dest": "/default" }
+    { "src": "/(.*)", "dest": "/render" }
   ]
 }
