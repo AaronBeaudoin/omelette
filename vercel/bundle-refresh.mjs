@@ -7,7 +7,7 @@ esbuild.build({
   format: "cjs",
   platform: "node",
 
-  entryPoints: [".vercel/output/functions/fetch/index.func/index.js"],
-  outfile: ".vercel/output/functions/fetch/index.func/index.js",
+  entryPoints: [".vercel/output/functions/refresh/index.func/index.js"],
+  outfile: ".vercel/output/functions/refresh/index.func/index.js",
   allowOverwrite: true
 });
