@@ -10,8 +10,9 @@ esbuild.build({
   platform: "browser",
   conditions: ["worker", "browser"],
 
-  entryPoints: [".vercel/output/functions/render/index.func/index.mjs"],
+  entryPoints: [".vercel/output/functions/render/index.func/index.js"],
   outfile: ".vercel/output/functions/render/index.func/index.js",
+  allowOverwrite: true,
 
   // `vite-plugin-ssr` uses some Node.js APIs that must be polyfilled
   // when bundling for edge functions since they are not available there.
