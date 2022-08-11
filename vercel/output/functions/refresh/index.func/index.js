@@ -1,3 +1,3 @@
-export default function handler(request, response) {
+module.exports = (request, response) => {
   console.log("[refresh]");
-}
+};
