@@ -1,3 +1,3 @@
-export default async function handler(request, response) {
+export default function handler(request, response) {
   console.log("[refresh]");
 }
