@@ -3,6 +3,6 @@
  * @param {import("@vercel/node").VercelResponse} response
  */
 export default async function handler(request, response) {
-  console.log("[data]");
-  response.send("[data]");
+  console.log("[fetch]");
+  response.send("[fetch]");
 }
