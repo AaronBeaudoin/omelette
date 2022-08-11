@@ -4,10 +4,10 @@ esbuild.build({
   bundle: true,
   minify: true,
   
-  format: "cjs",
+  format: "esm",
   platform: "node",
 
-  entryPoints: [".vercel/output/functions/fetch/index.func/index.js"],
-  outfile: ".vercel/output/functions/fetch/index.func/index.js",
+  entryPoints: [".vercel/output/functions/fetch/index.func/index.mjs"],
+  outfile: ".vercel/output/functions/fetch/index.func/index.mjs",
   allowOverwrite: true
 });
