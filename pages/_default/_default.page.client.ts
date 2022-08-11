@@ -11,6 +11,6 @@ export async function render(pageContext: PageContext) {
     "server-only": _ => undefined
   };
 
-  const page = createPageApp(pageContext);
+  const page = await createPageApp(pageContext);
   modeHandlers[getPageMode(pageContext)](page);
 }

@@ -24,7 +24,7 @@ export async function render(pageContext: PageContext) {
     "client-only": async _ => ""
   };
 
-  const page = createPageApp(pageContext);
+  const page = await createPageApp(pageContext);
   const pageHtml = await modeHandlers[getPageMode(pageContext)](page);
 
   return escape`

@@ -1,6 +1,4 @@
 <script lang="ts">
-export const mode = "server-and-client";
-export const layout = "default";
 export const title = "Home";
 </script>
 

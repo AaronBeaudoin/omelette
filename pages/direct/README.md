@@ -1,1 +1,0 @@
-Files in this directory will never be cached/pre-rendered on Vercel. Every request to a page in this directory will directly call a serverless render function and retrieve a fresh response. This may be desireable for server-rendered "app-like" pages such as an ecommerce cart or checkout, user-specific pages, or any other pages that should never be cached.
