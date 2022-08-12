@@ -2,10 +2,11 @@ import pathTools from "path";
 import glob from "glob";
 import { defineConfig } from "vite";
 import VitePluginAutoImport from "unplugin-auto-import/vite";
-import VitePluginSVG from "vite-svg-loader";
 import VitePluginIcons from "unplugin-icons/vite";
 import VitePluginUnoCSS from "unocss/vite";
 import VitePluginVue from "@vitejs/plugin-vue";
+import VitePluginMarkdown from "vite-plugin-md";
+import VitePluginSVG from "vite-svg-loader";
 import VitePluginVueComponents from "unplugin-vue-components/vite";
 import VitePluginSSR from "vite-plugin-ssr/plugin";
 import IconResolver from "unplugin-icons/resolver";
@@ -61,14 +62,21 @@ export default defineConfig({
     // The `@vitejs/plugin-vue` plugin enabled Vue support.
     VitePluginVue({
 
+      // Include both `.vue` files and `.md` files as Vue components.
+      include: [/\.vue$/, /\.md$/],
+
       // The Vite Vue plugin `reactivityTransform` property enables "ref sugar" in
       // Vue SFCs as described here: https://github.com/vuejs/rfcs/discussions/369
       reactivityTransform: true
     }),
 
+    // The `vite-plugin-md` plugin enables importing markdown files as Vue components.
+    // It also enables using Vue components inside of markdown files.
+    VitePluginMarkdown(),
+    
     // The `vite-svg-loader` plugin enables importing SVGs as Vue components.
     VitePluginSVG(),
-
+    
     // The `unplugin-vue-components` plugin enables component auto-importing.
     VitePluginVueComponents({
 

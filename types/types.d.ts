@@ -4,3 +4,8 @@ declare module "*.vue" {
   import type { DefineComponent } from "vue";
   export default DefineComponent<{}, {}, any>;
 }
+
+declare module "*.md" {
+  import type { DefineComponent } from "vue";
+  export default DefineComponent<{}, {}, any>;
+}
