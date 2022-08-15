@@ -1,6 +1,5 @@
 <script lang="ts">
 export const mode = "server-and-client";
-export const layout = "default";
 export const title = "Home";
 </script>
 
@@ -13,6 +12,7 @@ function two() {
 </script>
 
 <template>
+  <a href="/examples/alternate">Alternate Layout</a>
   <div class="bg-blue-200">Hello world!</div>
   <div>{{ count }} {{ count + 1 }}</div>
   <button @click="count += 1">+1</button>

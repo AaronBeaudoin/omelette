@@ -1,5 +1,5 @@
-import { createSSRApp, createApp, h } from "vue";
-import { App, Component, DefineComponent } from "vue";
+import { createSSRApp, createApp, h, defineComponent } from "vue";
+import { App, Component, ComponentOptions } from "vue";
 import { PageContext } from "./types";
 
 export type PageMode = "server-and-client" | "server-only" | "client-only";
@@ -12,14 +12,14 @@ export function getPageMode(pageContext: PageContext) {
   return (modes.includes(mode) ? mode : modes[0]) as PageMode;
 }
 
-export async function getLayoutComponent(name: string) {
-  const module = await import(`../../layouts/${name}.layout.vue`);
-  return module.default as DefineComponent;
+export async function getLayoutComponent(name?: string) {
+  try { return (await import(`../../layouts/${name || "default"}.layout.vue`)).default as ComponentOptions; }
+  catch { return defineComponent({ render() { return this.$slots.default && this.$slots.default(); } }); }
 }
 
 export async function wrapPageComponent(
-  PageComponent: DefineComponent,
-  LayoutComponent: DefineComponent,
+  LayoutComponent: ComponentOptions,
+  PageComponent: ComponentOptions,
   props = {}
 ) {
   const renderLayout = () => h(LayoutComponent, props || {}, { default: renderLayoutDefaultSlot });
@@ -28,10 +28,10 @@ export async function wrapPageComponent(
 }
 
 export async function createPageApp(pageContext: PageContext) {
-  const layoutName = (pageContext.exports.layout || "default") as string;
+  const layoutName = pageContext.exports.layout as (string | undefined);
   const LayoutComponent = await getLayoutComponent(layoutName);
 
-  const PageComponent = await wrapPageComponent(pageContext.Page, LayoutComponent, pageContext.pageProps);
+  const PageComponent = await wrapPageComponent(LayoutComponent, pageContext.Page, pageContext.pageProps);
   const page = (pageContext.exports.mode === "client-only" ? createApp : createSSRApp)(PageComponent);
 
   page.provide("pageContext", pageContext);

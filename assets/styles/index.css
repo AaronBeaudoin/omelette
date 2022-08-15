@@ -1,1 +1,3 @@
-/* Custom global non-atomic styles go here. */
+html, body, #page {
+  height: 100%;
+}
