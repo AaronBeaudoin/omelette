@@ -98,7 +98,9 @@ export default defineConfig({
       resolvers: [
 
         // This custom resolver allows us to auto-import components from
-        // our `components` directory as Vue components like `<My{Name}>`.
+        // our `components` directory as Vue components like `<My{ExampleName}>`.
+        // Component filenames should be in title case like `ExampleName.vue`.
+        // Example: Import `CustomButton.vue` like `<MyCustomButton/>`.
         name => {
           const prefix = "My";
           if (!name.startsWith(prefix)) return;
@@ -111,7 +113,9 @@ export default defineConfig({
         },
 
         // This custom resolver allows us to auto-import SVGs from our
-        // `assets/vectors` directory as Vue components like `<Vector{Name}>`.
+        // `assets/vectors` directory as Vue components like `<Vector{ExampleName}>`.
+        // SVG filenames should be in kebab case like `example-name.svg`.
+        // Example: Import `company-logo.svg` like `<VectorCompanyLogo/>`.
         name => {
           const prefix = "Vector";
           if (!name.startsWith(prefix)) return;
@@ -123,7 +127,7 @@ export default defineConfig({
           };
 
           const filename = toKebabCase(name.slice(prefix.length)) + ".svg";
-          return pathTools.join(__dirname, "assets/svgs", `${filename}?component`);
+          return pathTools.join(__dirname, "assets/vectors", `${filename}?component`);
         },
 
         // This resolver is provided by the `unplugin-icons` plugin and allows
