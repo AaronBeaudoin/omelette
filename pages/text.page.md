@@ -2,4 +2,4 @@
 
 Cool
 
-<MyTest></MyTest>
+<MyTest/>

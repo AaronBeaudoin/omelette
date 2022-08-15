@@ -10,4 +10,4 @@ esbuild.build({
   entryPoints: [".vercel/output/functions/fetch/index.func/index.mjs"],
   outfile: ".vercel/output/functions/fetch/index.func/index.mjs",
   allowOverwrite: true
-});m
+});
