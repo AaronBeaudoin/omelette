@@ -1,23 +1,14 @@
 <script lang="ts">
-export const mode = "server-and-client";
 export const title = "Home";
-</script>
-
-<script setup lang="ts">
-let count = $ref(1);
-
-function two() {
-  count += 2;
-}
+export default {};
 </script>
 
 <template>
-  <a href="/examples/alternate">Alternate Layout</a>
-  <div class="bg-blue-200">Hello world!</div>
-  <div>{{ count }} {{ count + 1 }}</div>
-  <button @click="count += 1">+1</button>
-  <button @click="two">+2</button>
-  <MyTest></MyTest>
-  <IconHero24ArrowRight/>
-  <VectorLogo/>
+  <h1 class="text-2xl font-bold">Examples</h1>
+  <div class="[&>*]:block [&>*]:underline">
+    <a href="/examples/alternate">Page With Alternate Layout</a>
+    <a href="/examples/markdown">Page With Markdown File</a>
+    <a href="/examples/vector-vue">SVG Auto-Imported In Vue SFC File</a>
+    <a href="/examples/vector-md">SVG Auto-Imported In Markdown File</a>
+  </div>
 </template>

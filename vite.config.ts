@@ -10,6 +10,7 @@ import VitePluginSVG from "vite-svg-loader";
 import VitePluginVueComponents from "unplugin-vue-components/vite";
 import VitePluginSSR from "vite-plugin-ssr/plugin";
 import IconResolver from "unplugin-icons/resolver";
+import { transformerVariantGroup } from "unocss";
 
 export default defineConfig({
   server: {
@@ -54,9 +55,15 @@ export default defineConfig({
     // It is a more configurable alternative to Tailwind CSS.
     VitePluginUnoCSS({
 
+      // Look for class names in both `.vue` files and `.md` files.
+      include: [/\.vue$/, /\.md$/],
+
       // This mode scopes atomic CSS classes in a Vue SFC to that component by
       // injecting the generated CSS in the the SFC's `<style scoped>` element.
-      mode: "vue-scoped"
+      mode: "vue-scoped",
+
+      // Enables support for https://windicss.org/features/variant-groups.html.
+      transformers: [transformerVariantGroup()]
     }),
 
     // The `@vitejs/plugin-vue` plugin enabled Vue support.
@@ -81,7 +88,7 @@ export default defineConfig({
     VitePluginVueComponents({
 
       // Auto import in both `.vue` files and `.md` files.
-      include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
+      include: [/\.vue$/, /\.md$/],
 
       // Generate a TypeScript `.d.ts` file for auto-imported components.
       dts: "types/components.d.ts",

@@ -33,7 +33,7 @@ export async function render(pageContext: PageContext) {
       <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-        <title>${title}vite-plugin-ssr</title>
+        <title>${title}VPS Starter</title>
         <link rel="icon" href="${faviconUrl}">
       </head>
       <body>
