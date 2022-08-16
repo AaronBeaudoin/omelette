@@ -2,16 +2,14 @@ import esbuild from "esbuild";
 import { NodeModulesPolyfillPlugin } from "@esbuild-plugins/node-modules-polyfill";
 
 esbuild.build({
+  platform: "browser",
+  target: "es2020",
+  format: "esm",
   bundle: true,
   minify: true,
-  
-  format: "esm",
-  target: "es2020",
-  platform: "browser",
-  conditions: ["worker", "browser"],
 
-  entryPoints: [".vercel/output/functions/render/index.func/index.mjs"],
-  outfile: ".vercel/output/functions/render/index.func/index.mjs",
+  entryPoints: [".vercel/output/functions/_pages/index.func/index.mjs"],
+  outfile: ".vercel/output/functions/_pages/index.func/index.mjs",
   allowOverwrite: true,
 
   // `vite-plugin-ssr` uses some Node.js APIs that must be polyfilled

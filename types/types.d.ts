@@ -11,3 +11,20 @@ declare module "*.md" {
   const Component: ComponentOptions;
   export default Component;
 }
+
+type DefaultFunctionConfig = {
+  type: "default"
+};
+
+type BuilderFunctionConfig = {
+  type: "builder",
+  expiration?: number,
+  build: () => Record<string, string>[]
+};
+
+type FunctionConfig = {
+  route: string
+} & (
+  DefaultFunctionConfig |
+  BuilderFunctionConfig
+);

@@ -2,6 +2,7 @@
   "version": 3,
   "routes": [
     { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/render" }
+    { "src": "/data/(.*)", "dest": "/_data" },
+    { "src": "/(.*)", "dest": "/_pages" }
   ]
 }

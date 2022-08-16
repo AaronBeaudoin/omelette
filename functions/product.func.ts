@@ -1,6 +1,10 @@
 export const config: FunctionConfig = {
-  route: "/",
-  type: "default"
+  route: "/product",
+  type: "builder",
+  build: () => [
+    { name: "ifast" },
+    { name: "xfast" }
+  ]
 };
 
 export function handler(query: Record<string, string>) {
