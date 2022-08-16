@@ -1,8 +1,10 @@
+// This file is preserved in case an example is needed for future use.
+// It is not currently actually used.
+
 import esbuild from "esbuild";
 
 esbuild.build({
-  platform: "browser",
-  target: "es2020",
+  platform: "node",
   format: "esm",
   bundle: true,
   minify: true,

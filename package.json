@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "vercel-build": "./vercel/build.sh",
+    "vercel-build": "./vercel/build/build.sh",
     "preview:render": "vite build && ts-node preview render",
     "preview:static": "vite build && ts-node preview static",
     "preview": "npm run preview:render"

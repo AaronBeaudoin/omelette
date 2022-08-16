@@ -32,8 +32,9 @@ cp -a dist/client/. .vercel/output/static
 
 # 4. COMPILE
 # Bundle/compile serverless/edge function entrypoints.
-node $(dirname ${BASH_SOURCE[0]})/bundle-pages.mjs
-node $(dirname ${BASH_SOURCE[0]})/bundle-data.mjs
+node $(dirname ${BASH_SOURCE[0]})/dispatch.mjs
+node $(dirname ${BASH_SOURCE[0]})/functions.mjs
+node $(dirname ${BASH_SOURCE[0]})/pages.mjs
 
 # ————————————————————————————————————————————————————————————————————————————————
 
