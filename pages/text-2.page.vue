@@ -1,4 +1,4 @@
 <template>
   <div>Test</div>
-  <MyTestMarkdown/>
+  <MyExampleMarkdown/>
 </template>

@@ -15,7 +15,7 @@ function two() {
   <div>{{ count }} {{ count + 1 }}</div>
   <button @click="count += 1">+1</button>
   <button @click="two">+2</button>
-  <MyTest></MyTest>
+  <MyExampleComponent></MyExampleComponent>
   <IconHero24ArrowRight/>
   <VectorLogo/>
 </template>
