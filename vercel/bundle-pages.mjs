@@ -3,6 +3,7 @@ import { NodeModulesPolyfillPlugin } from "@esbuild-plugins/node-modules-polyfil
 
 esbuild.build({
   platform: "browser",
+  conditions: ["worker"],
   target: "es2020",
   format: "esm",
   bundle: true,
