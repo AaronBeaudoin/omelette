@@ -27,19 +27,23 @@ export default defineConfig({
   },
   plugins: [
 
+
     // The `unplugin-auto-import` plugin enables auto-imports.
     VitePluginAutoImport({
 
-      // Generate a TypeScript `.d.ts` file for auto-imports.
-      dts: "types/auto.d.ts",
-
+      // Here we register the imports which we would like to make
+      // automatically available across our entire project.
       imports: [
         {
           "vue": ["ref"],
           "vue/macros": ["$ref"]
         }
-      ]
+      ],
+
+      // Generate a TypeScript `.d.ts` file for auto-imports.
+      dts: "types/auto.d.ts"
     }),
+
 
     // The `unplugin-icons` plugin enabled easy access to icons from Iconify.
     VitePluginIcons({
@@ -51,43 +55,47 @@ export default defineConfig({
       }
     }),
 
+
     // The `unocss` plugin is an atomic CSS engine.
     // It is a more configurable alternative to Tailwind CSS.
     VitePluginUnoCSS({
 
-      // Look for class names in both `.vue` files and `.md` files.
-      include: [/\.vue$/, /\.md$/],
+      // You may be tempted to switch to `vue-scoped`, but don't do it, because
+      // it causes CSS to be loaded along with the components during hydration,
+      // resulting in ugly layout shift, especially for `layout` components.
+      mode: "global",
 
       // Enables support for https://windicss.org/features/variant-groups.html.
-      transformers: [transformerVariantGroup()]
+      transformers: [transformerVariantGroup()],
+
+      // Look for class names in both `.vue` files and `.md` files.
+      include: [/\.vue$/, /\.md$/]
     }),
+
 
     // The `@vitejs/plugin-vue` plugin enabled Vue support.
     VitePluginVue({
-
-      // Include both `.vue` files and `.md` files as Vue components.
-      include: [/\.vue$/, /\.md$/],
-
+      
       // The Vite Vue plugin `reactivityTransform` property enables "ref sugar" in
       // Vue SFCs as described here: https://github.com/vuejs/rfcs/discussions/369
-      reactivityTransform: true
+      reactivityTransform: true,
+
+      // Include both `.vue` files and `.md` files as Vue components.
+      include: [/\.vue$/, /\.md$/]
     }),
+
 
     // The `vite-plugin-md` plugin enables importing markdown files as Vue components.
     // It also enables using Vue components inside of markdown files.
     VitePluginMarkdown(),
     
+
     // The `vite-svg-loader` plugin enables importing SVGs as Vue components.
     VitePluginSVG(),
     
+
     // The `unplugin-vue-components` plugin enables component auto-importing.
     VitePluginVueComponents({
-
-      // Auto import in both `.vue` files and `.md` files.
-      include: [/\.vue$/, /\.md$/],
-
-      // Generate a TypeScript `.d.ts` file for auto-imported components.
-      dts: "types/components.d.ts",
 
       // Here we define our "resolvers", which are responsible for
       // finding the components we want to be able to auto-import.
@@ -135,8 +143,15 @@ export default defineConfig({
             hero20: "heroicons-solid"
           }
         })
-      ]
+      ],
+
+      // Generate a TypeScript `.d.ts` file for auto-imported components.
+      dts: "types/components.d.ts",
+
+      // Auto import in both `.vue` files and `.md` files.
+      include: [/\.vue$/, /\.md$/]
     }),
+
 
     // The `vite-plugin-ssr` plugin enables SSR.
     // It is a lightweight, configurable alternative to Next/Nuxt.js.
@@ -146,5 +161,7 @@ export default defineConfig({
       // `_default.page.server.ts` so we can opt-in to pre-rendering on a per-page basis.
       prerender: true
     })
+
+
   ]
 });
