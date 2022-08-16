@@ -109,7 +109,7 @@ export default defineConfig({
           const prefix = "My";
           if (!name.startsWith(prefix)) return;
 
-          const filename = name.slice(prefix.length) + "{.vue,.md}";
+          const filename = name.slice(prefix.length) + ".{vue,md}";
           const globPath = pathTools.join(__dirname, "components", "**", filename);
 
           const paths = glob.sync(globPath);

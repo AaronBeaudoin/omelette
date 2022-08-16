@@ -1,5 +1,4 @@
 export const config: FunctionConfig = {
-  route: "/product",
   type: "builder",
   build: () => [
     { name: "ifast" },

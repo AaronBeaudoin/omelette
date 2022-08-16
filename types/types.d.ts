@@ -22,9 +22,7 @@ type BuilderFunctionConfig = {
   build: () => Record<string, string>[]
 };
 
-type FunctionConfig = {
-  route: string
-} & (
+type FunctionConfig = (
   DefaultFunctionConfig |
   BuilderFunctionConfig
 );
