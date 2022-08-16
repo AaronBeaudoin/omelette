@@ -58,10 +58,6 @@ export default defineConfig({
       // Look for class names in both `.vue` files and `.md` files.
       include: [/\.vue$/, /\.md$/],
 
-      // This mode scopes atomic CSS classes in a Vue SFC to that component by
-      // injecting the generated CSS in the the SFC's `<style scoped>` element.
-      mode: "vue-scoped",
-
       // Enables support for https://windicss.org/features/variant-groups.html.
       transformers: [transformerVariantGroup()]
     }),
