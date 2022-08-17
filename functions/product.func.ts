@@ -6,7 +6,7 @@ export const config: FunctionConfig = {
   ]
 };
 
-export function handler(query: Record<string, string>) {
+export function builder(query: Record<string, string>) {
   return {
     name: query.name || "product",
     date: new Date().toISOString()
