@@ -6,3 +6,9 @@ Still needed:
   - `xregexp`
   - `vue-imask`
   - `date-fns`
+
+## Issues to Resolve
+
+- Markdown auto-import issue.
+- Client-only HMR issue.
+- Server-only UnoCSS issue.
