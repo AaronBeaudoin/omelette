@@ -17,7 +17,7 @@ const configText = dedent`
 
 const scriptText = dedent`
   export default async function handler(request, response) {
-    response.send(\`[test] \${request.toString()}\`);
+    response.send(\`[test] \${JSON.stringify(request, null, 2)}\`);
   }
 `;
 
