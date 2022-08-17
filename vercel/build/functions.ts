@@ -17,8 +17,7 @@ const configText = dedent`
 
 const scriptText = dedent`
   export default async function handler(request, response) {
-    console.log("[fetch]");
-    response.send("[fetch]");
+    response.send("[test]", request.toString());
   }
 `;
 
@@ -28,7 +27,7 @@ glob.sync("functions/**/*.func.{ts,js}").map(async functionPath => {
 
   fileSystem.mkdirSync(outputPath, { recursive: true });
   fileSystem.writeFileSync(`${outputPath}/.vc-config.json`, configText);
-  fileSystem.writeFileSync(`${outputPath}/index.mjs`, "console.log('hello');");
+  fileSystem.writeFileSync(`${outputPath}/index.mjs`, scriptText);
 });
 
 /*
