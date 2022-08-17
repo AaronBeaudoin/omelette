@@ -23,11 +23,9 @@ cp -a dist/client/. .vercel/output/static
 
 # ————————————————————————————————————————————————————————————————————————————————
 
-# 3. COMPILE
-# Bundle/compile serverless/edge function entrypoints.
-npx ts-node $(dirname ${BASH_SOURCE[0]})/functions
-npx ts-node $(dirname ${BASH_SOURCE[0]})/dispatch
-npx ts-node $(dirname ${BASH_SOURCE[0]})/pages
+# 3. BUILD
+# Build serverless/edge function entrypoints.
+npx ts-node $(dirname ${BASH_SOURCE[0]})/build
 
 # ————————————————————————————————————————————————————————————————————————————————
 

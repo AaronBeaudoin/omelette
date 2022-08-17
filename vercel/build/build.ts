@@ -3,9 +3,10 @@ import pathTools from "path";
 import dedent from "dedent-js";
 import glob from "glob";
 import esbuild, { BuildOptions } from "esbuild";
+import { NodeModulesPolyfillPlugin } from "@esbuild-plugins/node-modules-polyfill";
 
 const root = pathTools.normalize(__dirname + "/../..");
-const output = root + "/.vercel/output/functions/_functions";
+const output = root + "/.vercel/output/functions";
 
 const config = dedent`
   {
@@ -53,7 +54,7 @@ glob.sync("functions/**/*.func.{ts,js}").map(async functionPath => {
   script = script.replaceAll("$path", `${root}/${functionPath.slice(0, -3)}`);
   script = script.replaceAll("$type", responseType);
 
-  const outputPath = `${output}/${functionPath.split("/").slice(1).join("/").slice(0, -3)}`;
+  const outputPath = `${output}/_functions/${functionPath.split("/").slice(1).join("/").slice(0, -3)}`;
   fileSystem.mkdirSync(outputPath, { recursive: true });
   fileSystem.writeFileSync(`${outputPath}/.vc-config.json`, config);
   fileSystem.writeFileSync(`${outputPath}/index.ts`, script);
@@ -70,6 +71,39 @@ glob.sync("functions/**/*.func.{ts,js}").map(async functionPath => {
 
   await esbuild.build(buildConfig);
   fileSystem.unlinkSync(`${outputPath}/index.ts`);
+});
+
+esbuild.build({
+  platform: "browser",
+  target: "es2020",
+  format: "esm",
+  bundle: true,
+  minify: true,
+
+  entryPoints: [`${output}/_dispatch/index.func/index.mjs`],
+  outfile: `${output}/_dispatch/index.func/index.mjs`,
+  allowOverwrite: true
+});
+
+esbuild.build({
+  platform: "browser",
+  conditions: ["worker"],
+  target: "es2020",
+  format: "esm",
+  bundle: true,
+  minify: true,
+
+  entryPoints: [`${output}/_pages/index.func/index.mjs`],
+  outfile: `${output}/_pages/index.func/index.mjs`,
+  allowOverwrite: true,
+
+  // `vite-plugin-ssr` uses some Node.js APIs that must be polyfilled
+  // when bundling for edge functions since they are not available there.
+  plugins: [NodeModulesPolyfillPlugin()],
+
+  // Defining these are required when using `esbuild`, otherwise we get runtime errors.
+  // https://github.com/vuejs/core/tree/main/packages/vue#bundler-build-feature-flags
+  define: { __VUE_OPTIONS_API__: "true", __VUE_PROD_DEVTOOLS__: "false" }
 });
 
 /*
