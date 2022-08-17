@@ -12,6 +12,10 @@ declare module "*.md" {
   export default Component;
 }
 
+declare type FunctionQuery = {
+  [key: string]: string | string[]
+};
+
 type DefaultFunctionConfig = {
   type: "default"
 };
