@@ -21,14 +21,6 @@ const template = dedent`
   import { $handler as inner } from "$path";
 
   export default async function handler(request: VercelRequest, response: VercelResponse) {
-    // console.log("[test]");
-    // console.log(request.method, request.url, request.httpVersion);
-    // console.log(JSON.stringify(request.query, null, 2));
-    // console.log(JSON.stringify(request.headers, null, 2));
-    // console.log(JSON.stringify(request.cookies, null, 2));
-    // console.log(request.body);
-    // response.send("[test] " + request.url);
-
     try {
       let handlerResult: unknown = inner(request.query);
       response.statusCode = 200;
