@@ -109,7 +109,7 @@ async function buildSymlinks(config: Config) {
     const targetPath = `${output}/_functions/${functionPath}.func`;
     const outputPath = `${output}/_prebuild/${prebuildHash}.func`;
 
-    fileSystem.symlinkSync(targetPath, outputPath);
+    fileSystem.symlinkSync(pathTools.relative(`${output}/_prebuild`, targetPath), outputPath);
     fileSystem.writeFileSync(`${outputPath.slice(0, -5)}.prerender-fallback.json`, JSON.stringify(prebuildData));
     fileSystem.writeFileSync(`${outputPath.slice(0, -5)}.prerender-config.json`, JSON.stringify({
       expiration: Number(prebuildExpiration) > -1 ? Number(prebuildExpiration) : false,
