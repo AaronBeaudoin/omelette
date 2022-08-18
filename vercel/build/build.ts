@@ -24,6 +24,9 @@ const functionTemplate = dedent`
   import { $handler as inner } from "$path";
 
   export default async function handler(request: VercelRequest, response: VercelResponse) {
+    console.log(JSON.stringify(request.query));
+    console.log(JSON.stringify(request.headers));
+
     try {
       let handlerResult: unknown = await inner(request.query);
       response.statusCode = 200;
