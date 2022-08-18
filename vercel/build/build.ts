@@ -8,22 +8,20 @@ import { NodeModulesPolyfillPlugin } from "@esbuild-plugins/node-modules-polyfil
 const root = pathTools.normalize(__dirname + "/../..");
 const output = root + "/.vercel/output/functions";
 
-const config = dedent`
-  {
-    "runtime": "nodejs14.x",
-    "handler": "index.mjs",
-    "launcherType": "Nodejs",
-    "shouldAddHelpers": true
-  }
-`;
+const functionConfig = JSON.stringify({
+  runtime: "nodejs14.x",
+  handler: "index.mjs",
+  launcherType: "Nodejs",
+  shouldAddHelpers: true
+});
 
-const template = dedent`
+const functionTemplate = dedent`
   import { VercelRequest, VercelResponse } from "@vercel/node";
   import { $handler as inner } from "$path";
 
   export default async function handler(request: VercelRequest, response: VercelResponse) {
     try {
-      let handlerResult: unknown = inner(request.query);
+      let handlerResult: unknown = await inner(request.query);
       response.statusCode = 200;
 
       if ("$type" === "json") {
@@ -49,15 +47,22 @@ glob.sync("functions/**/*.func.{ts,js}").map(async functionPath => {
   const handlerName = module.builder ? "builder" : "handler";
   const responseType = module.type || "json";
   
-  let script = template;
-  script = script.replaceAll("$handler", handlerName);
-  script = script.replaceAll("$path", `${root}/${functionPath.slice(0, -3)}`);
-  script = script.replaceAll("$type", responseType);
+  let functionScript = functionTemplate;
+  functionScript = functionScript.replaceAll("$handler", handlerName);
+  functionScript = functionScript.replaceAll("$path", `${root}/${functionPath.slice(0, -3)}`);
+  functionScript = functionScript.replaceAll("$type", responseType);
 
   const outputPath = `${output}/_functions/${functionPath.split("/").slice(1).join("/").slice(0, -3)}`;
   fileSystem.mkdirSync(outputPath, { recursive: true });
-  fileSystem.writeFileSync(`${outputPath}/.vc-config.json`, config);
-  fileSystem.writeFileSync(`${outputPath}/index.ts`, script);
+  fileSystem.writeFileSync(`${outputPath}/.vc-config.json`, functionConfig);
+  fileSystem.writeFileSync(`${outputPath}/index.ts`, functionScript);
+  
+  if (module.builder) {
+    fileSystem.writeFileSync(`${outputPath.slice(0, -5)}.prerender-config.json`, JSON.stringify({
+      expiration: Number.isInteger(module.expiration) ? module.expiration : false,
+      bypassToken: process.env.FUNCTIONS_BYPASS_TOKEN
+    }));
+  }
 
   const buildConfig: BuildOptions = {
     platform: "node",
