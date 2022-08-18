@@ -1,8 +1,8 @@
 {
   "version": 3,
   "routes": [
-    { "handle": "filesystem" },
     { "src": "/fn/(.*)", "middlewarePath": "_middleware/index" },
+    { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/_pages" }
   ]
 }
