@@ -2,7 +2,7 @@
  * @param {Request} request
  * @param {Event} event
  */
-export default async function index(request) {
+export default function middleware(request) {
   const url = new URL(request.url);
   url.pathname = "/";
   console.log(url.toString());
