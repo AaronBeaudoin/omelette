@@ -2,7 +2,7 @@
  * @param {Request} request
  * @param {Event} event
  */
- export default async function index(request) {
+export default async function index(request) {
   const url = new URL(request.url);
 
   const host = url.origin;

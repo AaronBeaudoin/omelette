@@ -2,7 +2,7 @@
   "version": 3,
   "routes": [
     { "handle": "filesystem" },
-    { "src": "/fn/(.*)", "dest": "/_dispatch" },
+    { "src": "/fn/(.*)", "middlewarePath": "/_middleware", "continue": true },
     { "src": "/(.*)", "dest": "/_pages" }
   ]
 }
