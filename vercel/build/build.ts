@@ -2,11 +2,14 @@ import fileSystem from "fs";
 import pathTools from "path";
 import dedent from "dedent-js";
 import glob from "glob";
-import esbuild, { BuildOptions } from "esbuild";
-import { NodeModulesPolyfillPlugin } from "@esbuild-plugins/node-modules-polyfill";
+import hash from "object-hash";
+import esbuild from "esbuild";
+
 
 const root = pathTools.normalize(__dirname + "/../..");
 const output = root + "/.vercel/output/functions";
+let prebuildManifest: any = {};
+
 
 const functionConfig = JSON.stringify({
   runtime: "nodejs14.x",
@@ -14,6 +17,7 @@ const functionConfig = JSON.stringify({
   launcherType: "Nodejs",
   shouldAddHelpers: true
 });
+
 
 const functionTemplate = dedent`
   import { VercelRequest, VercelResponse } from "@vercel/node";
@@ -42,78 +46,135 @@ const functionTemplate = dedent`
   }
 `;
 
-glob.sync("functions/**/*.func.{ts,js}").map(async functionPath => {
-  const module = await import(`${root}/${functionPath}`);
-  const handlerName = module.builder ? "builder" : "handler";
-  const responseType = module.type || "json";
-  
-  let functionScript = functionTemplate;
-  functionScript = functionScript.replaceAll("$handler", handlerName);
-  functionScript = functionScript.replaceAll("$path", `${root}/${functionPath.slice(0, -3)}`);
-  functionScript = functionScript.replaceAll("$type", responseType);
 
-  const outputPath = `${output}/_functions/${functionPath.split("/").slice(1).join("/").slice(0, -3)}`;
-  fileSystem.mkdirSync(outputPath, { recursive: true });
-  fileSystem.writeFileSync(`${outputPath}/.vc-config.json`, functionConfig);
-  fileSystem.writeFileSync(`${outputPath}/index.ts`, functionScript);
+async function buildFunctions(config: Config) {
+  await Promise.all(glob.sync("functions/**/*.func.{ts,js}").map(async functionPath => {
+    functionPath = functionPath.split("/").slice(1).join("/").slice(0, -8);
   
-  if (module.builder) {
+    const module = await import(`${root}/functions/${functionPath}.func.ts`);
+    const handlerName = module.builder ? "builder" : "handler";
+    const responseType = module.type || "json";
+    
+    let functionScript = functionTemplate;
+    functionScript = functionScript.replaceAll("$handler", handlerName);
+    functionScript = functionScript.replaceAll("$path", `${root}/functions/${functionPath}.func`);
+    functionScript = functionScript.replaceAll("$type", responseType);
+  
+    const outputPath = `${output}/_functions/${functionPath}.func`;
+    fileSystem.mkdirSync(outputPath, { recursive: true });
+    fileSystem.writeFileSync(`${outputPath}/.vc-config.json`, functionConfig);
+    fileSystem.writeFileSync(`${outputPath}/index.ts`, functionScript);
+    
+    if (module.builder) {
+      fileSystem.writeFileSync(`${outputPath.slice(0, -5)}.prerender-config.json`, JSON.stringify({
+        expiration: Number.isInteger(module.expiration) ? module.expiration : false,
+        bypassToken: config.secret
+      }));
+    }
+  
+    if (module.prebuild) {
+      await Promise.all((await module.prebuild()).map(async (query: FunctionQuery) => {
+        const prebuildHash = hash([functionPath, query], { respectType: false });
+        const prebuildExpiration = Number.isInteger(module.expiration) ? module.expiration : -1;
+        const prebuildManifestKey = `${functionPath}:${prebuildExpiration}:${prebuildHash}`;
+        const prebuildOutput = await module.builder(query);
+        prebuildManifest[prebuildManifestKey] = prebuildOutput;
+      }));
+    }
+  
+    await esbuild.build({
+      platform: "node",
+      format: "esm",
+      bundle: true,
+      minify: !config.debug,
+      
+      entryPoints: [`${outputPath}/index.ts`],
+      outfile:`${outputPath}/index.mjs`
+    });
+  
+    if (!config.debug) {
+      fileSystem.unlinkSync(`${outputPath}/index.ts`);
+    }
+  }));
+}
+
+
+async function buildSymlinks(config: Config) {
+  fileSystem.mkdirSync(`${output}/_prebuild`);
+
+  Object.keys(prebuildManifest).map(prebuildManifestKey => {
+    const [functionPath, prebuildExpiration, prebuildHash] = prebuildManifestKey.split(":");
+    const prebuildData = prebuildManifest[prebuildManifestKey];
+
+    const targetPath = `${output}/_functions/${functionPath}.func`;
+    const outputPath = `${output}/_prebuild/${prebuildHash}.func`;
+
+    fileSystem.symlinkSync(targetPath, outputPath);
+    fileSystem.writeFileSync(`${outputPath.slice(0, -5)}.prerender-fallback.json`, JSON.stringify(prebuildData));
     fileSystem.writeFileSync(`${outputPath.slice(0, -5)}.prerender-config.json`, JSON.stringify({
-      expiration: Number.isInteger(module.expiration) ? module.expiration : false,
-      bypassToken: process.env.FUNCTIONS_BYPASS_TOKEN
+      expiration: Number(prebuildExpiration) > -1 ? Number(prebuildExpiration) : false,
+      fallback: `${prebuildHash}.prerender-fallback.json`,
+      bypassToken: config.secret
     }));
-  }
+  });
 
-  const buildConfig: BuildOptions = {
-    platform: "node",
+  // 1. Create prebuild symlinks.
+  // 2. Inject prebuild manifest into dispatch.
+  // 3. Actually write the dispatch function.
+}
+
+
+async function buildDispatch(config: Config) {
+  await esbuild.build({
+    platform: "browser",
+    target: "es2020",
     format: "esm",
     bundle: true,
-    minify: true,
+    minify: !config.debug,
+    
+    entryPoints: [`${output}/_dispatch/index.func/index.mjs`],
+    outfile: `${output}/_dispatch/index.func/index.mjs`,
+    allowOverwrite: true
+  });
+}
+
+
+async function buildPages(config: Config) {
+  await esbuild.build({
+    platform: "browser",
+    conditions: ["worker"],
+    target: "es2020",
+    format: "esm",
+    bundle: true,
+    minify: !config.debug,
+    
+    entryPoints: [`${output}/_pages/index.func/index.mjs`],
+    outfile: `${output}/_pages/index.func/index.mjs`,
+    allowOverwrite: true,
   
-    entryPoints: [`${outputPath}/index.ts`],
-    outfile:`${outputPath}/index.mjs`
-  };
+    // `vite-plugin-ssr` uses some Node.js APIs that must be polyfilled
+    // when bundling for edge functions since they are not available there.
+    plugins: [(await import("@esbuild-plugins/node-modules-polyfill")).NodeModulesPolyfillPlugin()],
+  
+    // Defining these are required when using `esbuild`, otherwise we get runtime errors.
+    // https://github.com/vuejs/core/tree/main/packages/vue#bundler-build-feature-flags
+    define: { __VUE_OPTIONS_API__: "true", __VUE_PROD_DEVTOOLS__: "false" }
+  });
+}
 
-  await esbuild.build(buildConfig);
-  fileSystem.unlinkSync(`${outputPath}/index.ts`);
+
+type Config = {
+  secret: string | undefined,
+  debug: boolean
+};
+
+(async (config: Config) => {
+  await buildFunctions(config);
+  await buildSymlinks(config);
+  await buildDispatch(config);
+  await buildPages(config);
+
+})({
+  secret: process.env.FUNCTIONS_SECRET,
+  debug: !!process.env.FUNCTIONS_DEBUG
 });
-
-esbuild.build({
-  platform: "browser",
-  target: "es2020",
-  format: "esm",
-  bundle: true,
-  minify: true,
-
-  entryPoints: [`${output}/_dispatch/index.func/index.mjs`],
-  outfile: `${output}/_dispatch/index.func/index.mjs`,
-  allowOverwrite: true
-});
-
-esbuild.build({
-  platform: "browser",
-  conditions: ["worker"],
-  target: "es2020",
-  format: "esm",
-  bundle: true,
-  minify: true,
-
-  entryPoints: [`${output}/_pages/index.func/index.mjs`],
-  outfile: `${output}/_pages/index.func/index.mjs`,
-  allowOverwrite: true,
-
-  // `vite-plugin-ssr` uses some Node.js APIs that must be polyfilled
-  // when bundling for edge functions since they are not available there.
-  plugins: [NodeModulesPolyfillPlugin()],
-
-  // Defining these are required when using `esbuild`, otherwise we get runtime errors.
-  // https://github.com/vuejs/core/tree/main/packages/vue#bundler-build-feature-flags
-  define: { __VUE_OPTIONS_API__: "true", __VUE_PROD_DEVTOOLS__: "false" }
-});
-
-/*
-1. Generate functions.
-2. For prebuilt queries, generate output and create prerender function symlinks in a special directory, maybe `output/functions/_prebuilt`?
-3. Create a manifest of these prebuilt outputs and prepend an `import manifest from "manifest.json";` (or something like that) line to `.vercel/output/functions/_dispatch/index.func/index.mjs`.
-4. Write logic inside of the dispatch function that checks this manifest for prebuilt output and "redirects" queries to it where applicable.
-*/
