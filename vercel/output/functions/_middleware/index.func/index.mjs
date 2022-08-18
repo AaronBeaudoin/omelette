@@ -7,6 +7,6 @@ export default async function index(request) {
 
   const response = new Response();
   response.headers.set("X-Middleware-Rewrite", "/");
-  // response.headers.set("X-Middleware-Next", "1");
+  response.headers.set("X-Middleware-Next", "1");
   return response;
 }
