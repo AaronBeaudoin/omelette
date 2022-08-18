@@ -10,5 +10,6 @@ export default async function index(request) {
   const response = new Response();
   // response.headers.set("x-middleware-next", "1");
   response.headers.set("x-middleware-rewrite", url.toString());
+  response.headers.set("x-spaghetti", "yes");
   return response;
 }
