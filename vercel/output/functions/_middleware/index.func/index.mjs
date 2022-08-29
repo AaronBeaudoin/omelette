@@ -9,7 +9,7 @@ export default function middleware(request) {
 
   const response = new Response();
   // response.headers.set("x-middleware-next", "1");
-  response.headers.set("x-middleware-rewrite", url.toString());
+  response.headers.set("x-middleware-rewrite", "/");
   response.headers.set("x-spaghetti", "yes");
   return response;
 }

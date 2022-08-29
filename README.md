@@ -18,7 +18,8 @@ Issues are listed in order of most problematic to least problematic. All issues 
 ### Functions Features
 
 - **`_dispatch` Edge Function**  
-  _Rather than accessing all functions directly, the app will interact with functions via a `_dispatch` function which is rewritten to for all paths at `/fn/**`. This function runs at the edge so it has no cold-start, and itself handles calls to all serverless functions acting sort of like a middleware. This architecture lets us easily use the `_dispatch` function to handle redirecting to prebuilt queries, revalidating on-demand, and skipping builders with a preview mode._
+  _Rather than accessing all functions directly, the app will interact with functions via a `_dispatch` function which is rewritten to for all paths at `/fn/**`. This function runs at the edge so it has no cold-start, and itself handles calls to all serverless functions acting sort of like a middleware. This architecture lets us easily use the `_dispatch` function to handle redirecting to prebuilt queries, revalidating on-demand, and skipping builders with a preview mode._  
+  _**EDIT: Rework this to be an edge middleware instead if possible. So far, performance when going through an edge function seems to be significantly worse than accessing a route directly, and I suspect using a middleware instead might solve the issue.**_
 - **`_prebuilt` Functions**  
   _Builder functions can have arbitrary specific query combinations prebuilt at build-time to ensure "full-static-like" performance on every request. My current plan is to implement this by generating "symlink" functions in a `output/functions/_prebuilt/` directory along with a manifest of all prebuilt query combinations. I then import this manifest in my `_dispatch` function and "redirect" queries when applicable._
 - **Development/Preview Middleware**  
