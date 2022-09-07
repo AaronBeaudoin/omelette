@@ -34,3 +34,7 @@ Issues are listed in order of most problematic to least problematic. All issues 
 Automatically include some common useful dependencies.
 
 `lodash`, `date-fns`, `xregexp`, `@vueuse/core`, `vue-imask`
+
+## More Random Thoughts
+
+- The preview script should only have one mode now. Since deployment is opinionated and based only on Cloudflare Workers, we can deploy in such a way that assumes we never need full static. This DOESN'T mean we NEVER need any static pages, however. We can still make pages static, but doing so simply causes the file at the URL to take precedence over server rendering because the worker always checks for a static file first.

@@ -82,6 +82,9 @@ async function buildFunctions(config: Config) {
         const prebuildExpiration = Number.isInteger(module.expiration) ? module.expiration : -1;
         const prebuildManifestKey = `${functionPath}:${prebuildExpiration}:${prebuildHash}`;
         const prebuildOutput = await module.builder(query);
+
+        prebuildOutput["prebuild"] = true; // FOR TESTING
+        console.log(prebuildHash, functionPath, query);
         prebuildManifest[prebuildManifestKey] = prebuildOutput;
       }));
     }
@@ -136,9 +139,12 @@ async function buildDispatch(config: Config) {
     bundle: true,
     minify: !config.debug,
     
-    entryPoints: [`${output}/_dispatch/index.func/index.mjs`],
-    outfile: `${output}/_dispatch/index.func/index.mjs`,
-    allowOverwrite: true
+    entryPoints: [`${output}/_middleware/index.func/index.mjs`],
+    outfile: `${output}/_middleware/index.func/index.mjs`,
+    allowOverwrite: true,
+
+    // WIP
+    define: { PREBUILD_MANIFEST: JSON.stringify(prebuildManifest) }
   });
 }
 

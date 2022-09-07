@@ -4,16 +4,17 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "vercel-build": "vite build && ./vercel/build/build.sh",
     "preview:render": "vite build && ts-node preview render",
     "preview:static": "vite build && ts-node preview static",
     "preview": "npm run preview:render"
   },
   "dependencies": {
-    "vite-plugin-ssr": "^0.4.13",
+    "@cloudflare/kv-asset-handler": "^0.2.0",
+    "vite-plugin-ssr": "^0.4.31",
     "vue": "^3.2.37"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^3.16.0",
     "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
     "@iconify-json/heroicons-outline": "^1.1.2",
     "@iconify-json/heroicons-solid": "^1.1.2",

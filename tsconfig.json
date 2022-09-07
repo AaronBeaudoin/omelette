@@ -6,12 +6,15 @@
     "isolatedModules": true,
     "target": "ES2017",
     "lib": ["DOM", "ESNext"],
-    "types": ["vite/client"],
     "skipLibCheck": true,
     "esModuleInterop": true,
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": { "/*": ["*"] },
+    "types": [
+      "vite/client",
+      "@cloudflare/workers-types"
+    ]
   },
   "ts-node": {
     "transpileOnly": true,
