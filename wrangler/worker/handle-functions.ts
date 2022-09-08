@@ -29,6 +29,8 @@ export async function handleFunctionRoute(
 
 export default {
   async fetch(request: Request, env: Environment, context: ExecutionContext) {
-    return new Response("Hello world!", { status: 200 });
+    let response = await handleFunctionRoute(request, env, context);
+    if (!response) response = new Response("INVALID_ROUTE", { status: 500 });
+    return response;
   }
 };

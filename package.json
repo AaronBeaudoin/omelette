@@ -6,12 +6,14 @@
     "dev:wrangler": "wrangler dev wrangler/worker/handle-functions",
     "dev:manifest": "chokidar . -i **/_manifest.ts -c \"npm run build:manifest\"",
     "dev": "npm run build:manifest && concurrently npm:dev:*",
+    "build:vite": "vite build",
     "build:manifest": "ts-node wrangler/build-manifest",
-    "build:bundle": "ts-node wrangler/build-bundle",
-    "build": "npm run build:manifest && npm run build:bundle && vite build",
+    "build:bundle": "npm run build:manifest && ts-node wrangler/build-bundle",
+    "build": "npm run build:vite && npm run build:bundle",
     "preview:wrangler": "wrangler dev wrangler/_worker.mjs --no-bundle",
     "preview": "npm run build && npm run preview:wrangler",
-    "deploy": "npm run build && wrangler publish wrangler/_worker.mjs --no-bundle"
+    "deploy:wrangler": "wrangler publish wrangler/_worker.mjs --no-bundle",
+    "deploy": "npm run build && npm run deploy:wrangler"
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "^0.2.0",

@@ -36,7 +36,7 @@ type Config = {
 
   const functionModulePath = `${__dirname}/_manifest.ts`;
   fileSystem.writeFileSync(functionModulePath, functionModuleText);
-  console.log(`${chalk.blue('BUILD')} Function manifest module built succesfully!`);
+  console.log(`${chalk.blue('BUILD')} _manifest.ts`);
 
 })({
   secret: process.env.FUNCTIONS_SECRET,
