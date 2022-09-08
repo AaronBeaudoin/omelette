@@ -10,9 +10,9 @@
     "build:manifest": "ts-node wrangler/build-manifest",
     "build:bundle": "npm run build:manifest && ts-node wrangler/build-bundle",
     "build": "npm run build:vite && npm run build:bundle",
-    "preview:wrangler": "wrangler dev wrangler/_worker.mjs --no-bundle",
+    "preview:wrangler": "wrangler dev wrangler/worker.mjs --no-bundle",
     "preview": "npm run build && npm run preview:wrangler",
-    "deploy:wrangler": "wrangler publish wrangler/_worker.mjs --no-bundle",
+    "deploy:wrangler": "wrangler publish wrangler/worker.mjs --no-bundle",
     "deploy": "npm run build && npm run deploy:wrangler"
   },
   "dependencies": {

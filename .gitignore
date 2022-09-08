@@ -5,4 +5,4 @@ dist/
 .DS_Store
 
 _manifest.ts
-_worker.mjs
+worker.mjs

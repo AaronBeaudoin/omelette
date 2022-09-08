@@ -16,8 +16,8 @@ type Config = {
     bundle: true,
     minify: !config.debug,
     
-    entryPoints: [`${__dirname}/worker`],
-    outfile: `${__dirname}/_worker.mjs`,
+    entryPoints: [`${__dirname}/worker/index.ts`],
+    outfile: `${__dirname}/worker.mjs`,
     allowOverwrite: true,
   
     // `vite-plugin-ssr` uses some Node.js APIs that must be polyfilled
@@ -32,8 +32,8 @@ type Config = {
     external: ["__STATIC_CONTENT_MANIFEST"]
   });
   
-  const stat = fileSystem.statSync(`${__dirname}/_worker.mjs`);
-  console.log(`${chalk.blue('BUILD')} _worker.mjs ${stat.size / 1000} KB`);
+  const stat = fileSystem.statSync(`${__dirname}/worker.mjs`);
+  console.log(`${chalk.blue('BUILD')} worker.mjs ${stat.size / 1000} KB`);
 
 })({
   secret: process.env.FUNCTIONS_SECRET,
