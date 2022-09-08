@@ -1,4 +1,6 @@
+name = "vite-plugin-ssr-vue-starter"
 compatibility_date = "2022-05-03"
+site = { bucket = "dist/client" }
 vars = { MODE = "production" }
 
 [[kv_namespaces]]
