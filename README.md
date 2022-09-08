@@ -15,6 +15,10 @@ When choosing a stack for a website you have to make a lot of decisions. The res
 - Talk about the chosen stack and the reason for each decision.
 
 
+## Pending Issues
+
+1. Logs are super ugly. Since the project has to run both Vite and Wrangler at the same time, and both really like to take over the whole terminal, I haven't found a clean way to mix everything. If nice terminal logs are important to you, the best solution right now is to run `npm run dev:manifest`, `npm run dev:manifest`, and `npm run dev:manifest` separately rather than just running `npm run dev`.
+
 
 ## Pending Ecosystem Issues
 
@@ -26,6 +30,7 @@ Issues are listed in order of most problematic to least problematic. All issues 
    _`.page.server.xyz` files are considered low-priority right now, but they're important for marketing pages that need to be super lightweight and fast. I personally feel that this issue should be higher priority._
 3. [`vite-plugin-md/#112`](https://github.com/antfu/vite-plugin-md/issues/112) — **Component auto-importing doesn't work for `.md` files.**  
    _You can always just manually import the component, or not use components in your `.md` files, so this issue is really just a minor annoyance. And since it affects all SSR frameworks, it should be fixed soon._
+
 
 ## Pending Features
 

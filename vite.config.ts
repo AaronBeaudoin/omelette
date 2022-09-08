@@ -21,9 +21,11 @@ export default defineConfig({
     host: "0.0.0.0",
 
     // Vite now uses port 5173 to avoid collisions with other tools.
-    // What a weird number to try and remember. How about we stick to 3000?
-    port: 3000
+    // What a weird number to try and remember. We'll stick with 3000.
+    port: 3000,
 
+    // Calls to functions are handled by `wrangler dev` at port 8787.
+    proxy: { "/fn": "http://localhost:8787" }
   },
   plugins: [
 

@@ -2,11 +2,16 @@
   "name": "vite-plugin-ssr-vue-starter",
   "version": "0.1.0",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview:render": "vite build && ts-node preview render",
-    "preview:static": "vite build && ts-node preview static",
-    "preview": "npm run preview:render"
+    "dev:vite": "vite",
+    "dev:wrangler": "wrangler dev wrangler/worker/handle-functions",
+    "dev:manifest": "chokidar . -i **/_manifest.ts -c \"npm run build:manifest\"",
+    "dev": "npm run build:manifest && concurrently npm:dev:*",
+    "build:manifest": "ts-node wrangler/build-manifest",
+    "build:bundle": "ts-node wrangler/build-bundle",
+    "build": "npm run build:manifest && npm run build:bundle && vite build",
+    "preview:wrangler": "wrangler dev wrangler/_worker.mjs --no-bundle",
+    "preview": "npm run build && npm run preview:wrangler",
+    "deploy": "npm run build && wrangler publish wrangler/_worker.mjs --no-bundle"
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "^0.2.0",
@@ -27,6 +32,7 @@
     "@vitejs/plugin-vue": "^3.0.1",
     "chalk": "^4.1.2",
     "chokidar-cli": "^3.0.0",
+    "concurrently": "^7.4.0",
     "dedent-js": "^1.0.1",
     "esbuild": "^0.15.0",
     "express": "^4.18.1",
@@ -41,6 +47,7 @@
     "unplugin-vue-components": "^0.21.2",
     "vite": "^3.0.3",
     "vite-plugin-md": "^0.20.2",
-    "vite-svg-loader": "^3.4.0"
+    "vite-svg-loader": "^3.4.0",
+    "wrangler": "^2.0.29"
   }
 }
