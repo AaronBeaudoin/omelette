@@ -1,6 +1,6 @@
 node_modules/
-!vercel/output/functions/default.func/node_modules/
 dist/
 .vercel/
 .vscode/
 .DS_Store
+_manifest.ts

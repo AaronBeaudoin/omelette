@@ -1,8 +1,5 @@
 compatibility_date = "2022-05-03"
 vars = { MODE = "production" }
-# name = "worker-sites-example"
-# main = "wr_worker.js"
-# site = { bucket = "./public" }
 
 [[kv_namespaces]]
 id = "40537e421da14006af9b9949c46c7400"

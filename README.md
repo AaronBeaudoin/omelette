@@ -2,6 +2,20 @@
 
 An opinionated starter template for Vite + Vue similar to [`antfu/vitesse`](https://github.com/antfu/vitesse), but focused on **server-side rendering** (SSR) via [`vite-plugin-ssr`](https://vite-plugin-ssr.com) and an opinionated deployment architecture strategy using [Vercel](https://vercel.com/home).
 
+
+# IDEA
+
+Instead of using this README for documentation, make the pages of this starter the documentation itself!
+
+
+## Docs Here
+
+When choosing a stack for a website you have to make a lot of decisions. The research you'll do in order to make these decisions will likely take you days and require a lot of experimentation and testing. The aim of this repository is to help make your life easier by opinionatedly making most of these decisions for you. This document will describe what decisions were made for you and which ones you'll still need to make yourself.
+
+- Talk about the chosen stack and the reason for each decision.
+
+
+
 ## Pending Ecosystem Issues
 
 Issues are listed in order of most problematic to least problematic. All issues are related specifically to SSR unless otherwise specified.
@@ -16,6 +30,8 @@ Issues are listed in order of most problematic to least problematic. All issues 
 ## Pending Features
 
 ### Functions Features
+
+THIS STUFF IS GENERALLY ALL OUT-OF-DATE BECAUSE IT IS OVER-ENGINEERING FOR VERCEL
 
 - **`_dispatch` Edge Function**  
   _Rather than accessing all functions directly, the app will interact with functions via a `_dispatch` function which is rewritten to for all paths at `/fn/**`. This function runs at the edge so it has no cold-start, and itself handles calls to all serverless functions acting sort of like a middleware. This architecture lets us easily use the `_dispatch` function to handle redirecting to prebuilt queries, revalidating on-demand, and skipping builders with a preview mode._  
@@ -37,4 +53,14 @@ Automatically include some common useful dependencies.
 
 ## More Random Thoughts
 
+- Need to make `_default.page.server.ts` use streams instead of rendering to a string.
 - The preview script should only have one mode now. Since deployment is opinionated and based only on Cloudflare Workers, we can deploy in such a way that assumes we never need full static. This DOESN'T mean we NEVER need any static pages, however. We can still make pages static, but doing so simply causes the file at the URL to take precedence over server rendering because the worker always checks for a static file first.
+- Test Workers on custom subdomain
+- Test function with JSON return (text vs stream)
+- Add Git CI/CD with Actions
+  - Ensure node_modules are cached
+  - Lookup best practices for performance
+- Still going to need middleware to proxy function calls.
+  - In Vite dev server this will do `wrangler dev --local`. NEVERMIND.
+  - In `preview.ts` this will just do `wrangler dev`.
+  - Both should use some preview mode to disable caching.

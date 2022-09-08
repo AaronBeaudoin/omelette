@@ -1,8 +1,11 @@
 import { getAssetFromKV, Options as AssetHandlerConfig } from "@cloudflare/kv-asset-handler";
 import { renderPage } from "vite-plugin-ssr";
 
-import manifestString from "__STATIC_CONTENT_MANIFEST";
-const manifest = JSON.parse(manifestString);
+// @ts-ignore
+import functionManifest from "./_manifest";
+
+import assetManifestString from "__STATIC_CONTENT_MANIFEST";
+const assetManifest = JSON.parse(assetManifestString);
 
 interface Environment {
   __STATIC_CONTENT: KVNamespace,
@@ -18,7 +21,7 @@ function getParsedUrl(request: Request) {
   standardUrl.searchParams.sort();
 
   return {
-    path: standardUrl.pathname,
+    path: standardUrl.pathname.replace(/([^\/])\/$/, "$1"),
     query: Object.fromEntries(standardUrl.searchParams),
     queryString: standardUrl.search,
     _originalUrl: originalUrl,
@@ -32,7 +35,7 @@ function getFetchEvent(request: Request, context: ExecutionContext) {
 }
 
 function getAssetHandlerConfig(env: Environment): Partial<AssetHandlerConfig> {
-  return { ASSET_NAMESPACE: env.__STATIC_CONTENT, ASSET_MANIFEST: manifest };
+  return { ASSET_NAMESPACE: env.__STATIC_CONTENT, ASSET_MANIFEST: assetManifest };
 }
 
 async function handleFunctionRoute(
@@ -42,7 +45,19 @@ async function handleFunctionRoute(
 ) {
   const url = getParsedUrl(request);
   if (!url.path.startsWith("/fn")) return null;
-  return new Response("Hello world!", { status: 200 });
+  if (!(url.path in functionManifest)) return new Response(null, { status: 404 });
+
+  const path = url.path as keyof typeof functionManifest;
+  const functionConfig = functionManifest[path] as { [method: string]: Function };
+  const functionResult = await functionConfig[request.method.toLowerCase()](url.query);
+
+  return new Response(functionResult?.data, {
+    status: 200,
+    headers: {
+      "Content-Type": functionResult?.contentType || "text/plain",
+      "X-Data-Cache": "PREVIEW"
+    }
+  });
 }
 
 async function handleAssetRoute(
