@@ -47,6 +47,7 @@ Automatically include some common useful dependencies.
 - Add Git CI/CD with Actions
   - Ensure node_modules are cached
   - Lookup best practices for performance
+  - Looks like best option might be simply cloudflares officail github action https://github.com/marketplace/actions/deploy-to-cloudflare-workers-with-wrangler
 - Add caching to functions
   - Add preview mode via some secret passed via a `?preview=<secret>` query parameter.
   - Preview mode is always enabled in dev/preview.
