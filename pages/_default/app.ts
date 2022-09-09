@@ -3,7 +3,7 @@ import { App, Component, ComponentOptions } from "vue";
 import { PageContext } from "./types";
 
 export type PageMode = "server-and-client" | "server-only" | "client-only";
-export type ServerPageModeHandler = (page: App<Element>) => Promise<string>;
+export type ServerPageModeHandler = (page: App<Element>) => ((writable: WritableStream) => void) | string;
 export type ClientPageModeHandler = (page: App<Element>) => Component | undefined;
 
 export function getPageMode(pageContext: PageContext) {

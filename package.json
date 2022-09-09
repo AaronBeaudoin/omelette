@@ -4,7 +4,7 @@
   "scripts": {
 
     "dev:vite": "vite",
-    "dev:wrangler": "wrangler dev wrangler/worker/handle-functions",
+    "dev:wrangler": "wrangler dev wrangler/worker/handle-functions --port 8787 --var DEV",
     "dev:manifest": "chokidar functions -i **/_manifest.ts -c \"npm run build:manifest\"",
     "dev": "npm run build:manifest && concurrently npm:dev:*",
 

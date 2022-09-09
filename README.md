@@ -41,7 +41,6 @@ Automatically include some common useful dependencies.
 
 ## More Random Thoughts
 
-- Need to make `_default.page.server.ts` use streams instead of rendering to a string.
 - Test Workers on custom subdomain
 - Test function with JSON return (text vs stream)
 - Add Git CI/CD with Actions
@@ -52,3 +51,4 @@ Automatically include some common useful dependencies.
   - Add preview mode via some secret passed via a `?preview=<secret>` query parameter.
   - Preview mode is always enabled in dev/preview.
   - Add a `?refresh=<secret>` query parameter than can be added to any route + query to refresh.
+- After everything is done, write some meaningful docs! I think the perfect way to do this is right in the pages of the example itself.
