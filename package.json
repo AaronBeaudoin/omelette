@@ -2,28 +2,23 @@
   "name": "vite-plugin-ssr-vue-starter",
   "version": "0.1.0",
   "scripts": {
-
     "dev:vite": "vite",
     "dev:wrangler": "wrangler dev wrangler/worker/handle-functions --port 8787 --var DEV",
     "dev:manifest": "chokidar functions -i **/_manifest.ts -c \"npm run build:manifest\"",
     "dev": "npm run build:manifest && concurrently npm:dev:*",
-
     "build:vite": "vite build",
     "build:manifest": "ts-node wrangler/build-manifest",
     "build:bundle": "npm run build:manifest && ts-node wrangler/build-bundle",
     "build": "npm run build:vite && npm run build:bundle",
-
     "preview:wrangler": "wrangler dev --no-bundle",
     "preview": "npm run build && npm run preview:wrangler",
-
     "deploy:wrangler": "wrangler publish --no-bundle",
     "deploy": "npm run build && npm run deploy:wrangler"
-
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "^0.2.0",
     "vite-plugin-ssr": "^0.4.31",
-    "vue": "^3.2.37"
+    "vue": "^3.2.39"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.16.0",
