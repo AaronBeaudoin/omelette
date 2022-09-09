@@ -1,4 +1,5 @@
 export interface Environment {
-  __STATIC_CONTENT: KVNamespace,
-  DATA: KVNamespace
+  SECRET?: string,
+  DATA: KVNamespace,
+  __STATIC_CONTENT: KVNamespace
 }
