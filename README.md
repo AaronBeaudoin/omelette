@@ -42,7 +42,6 @@ Automatically include some common useful dependencies.
 ## More Random Thoughts
 
 - Test Workers on custom subdomain
-- Test function with JSON return (text vs stream)
 - Add Git CI/CD with Actions
   - Ensure node_modules are cached
   - Lookup best practices for performance
