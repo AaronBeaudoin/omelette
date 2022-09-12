@@ -1,4 +1,3 @@
-import { env } from "process";
 import { getParsedUrl } from "./helpers";
 import { Environment } from "./types";
 
