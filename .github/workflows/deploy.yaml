@@ -13,11 +13,14 @@ jobs:
         uses: actions/setup-node@v3
         with: { node-version: 16.x, cache: npm }
 
-      - name: 3. Build Vite Output
+      - name: 3. Install Dependecies
+        run: npm ci
+
+      - name: 4. Build Vite Output
         run: npm run build:vite
 
-      - name: 4. Build Worker Bundle
+      - name: 5. Build Worker Bundle
         run: npm run build:bundle
 
-      - name: 5. Deploy Via Wrangler
+      - name: 6. Deploy Via Wrangler
         run: npm run deploy:wrangler
