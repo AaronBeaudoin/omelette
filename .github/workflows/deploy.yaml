@@ -1,6 +1,10 @@
 name: CI/CD
 on: { push: { branches: [main] } }
 
+env:
+  CLOUDFLARE_API_TOKEN: "${{ secrets.CLOUDFLARE_API_TOKEN }}"
+  CLOUDFLARE_ACCOUNT_ID: "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}"
+
 jobs:
   deploy:
     name: Deploy
@@ -25,4 +29,3 @@ jobs:
 
       - name: 6. Deploy Via Wrangler
         run: npm run deploy:wrangler
-        env: { CLOUDFLARE_API_TOKEN: "${{ secrets.DEPLOY }}" }
