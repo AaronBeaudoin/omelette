@@ -7,15 +7,15 @@ export default {
   async fetch(request: Request, env: Environment, context: ExecutionContext) {
     let response: Response | null = null;
 
-    // 1. Respond with function output if applicable for the incoming path.
+    // 1. Respond with function result if applicable.
     response = await handleFunctionRoute(request, env, context);
     if (response) return response;
 
-    // 2. Respond with a static asset if applicable for the incoming path.
+    // 2. Respond with a static asset if applicable.
     response = await handleAssetRoute(request, env, context);
     if (response) return response;
     
-    // 3. Respond with a page if applicable for the incoming path.
+    // 3. Respond with a page if applicable.
     response = await handlePageRoute(request);
     if (response) return response;
 
