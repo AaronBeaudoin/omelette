@@ -10,6 +10,6 @@ ip = "0.0.0.0"
 port = 3000
 
 [[kv_namespaces]]
-id = "40537e421da14006af9b9949c46c7400"
-preview_id = "1b7927754b3c4db990e1a2bc3e11605b"
+id = "46a34081c7464164beaeb904316dc84d"
+preview_id = "4bd590006f944d2a935b37c28856ec38"
 binding = "DATA"

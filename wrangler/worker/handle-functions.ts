@@ -58,9 +58,11 @@ function getStoreKey(path: Path, query: Query) {
   return path + (queryString.length ? "?" + queryString : ""); 
 }
 
-function setStoreValue(env: Environment, key: string, result: Result) {
-  const config = { metadata: { contentType: result.contentType } };
-  return env.DATA.put(key, result.data, config);
+function setStoreValue(env: Environment, key: string, result: Result, cache: boolean | number) {
+  return env.DATA.put(key, result.data, {
+    expirationTtl: typeof cache === "number" && cache >= 60 ? cache : undefined,
+    metadata: { contentType: result.contentType }
+  });
 }
 
 async function getStoreValue(env: Environment, key: string) {
@@ -99,7 +101,7 @@ export async function handleFunctionRoute(
     const refresh = async (key: string) => {
       const result = await handler(query);
       if (typeof result === "string") return;
-      await setStoreValue(env, key, result);
+      await setStoreValue(env, key, result, cache);
     };
   
     context.waitUntil(refresh(getStoreKey(path, query)));
@@ -128,7 +130,10 @@ export async function handleFunctionRoute(
   if (typeof result === "string") return new Response(result, { status: 500 });
 
   // 9. Cache result if applicable.
-  if (cache && !preview) context.waitUntil(setStoreValue(env, getStoreKey(path, query), result));
+  if (cache && !preview) {
+    const key = getStoreKey(path, query);
+    context.waitUntil(setStoreValue(env, key, result, cache));
+  }
 
   // 10. Return result.
   return new Response(result.data, {

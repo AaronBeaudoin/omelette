@@ -1,11 +1,9 @@
 export default {
   cache: true,
-  get(query: { [key: string]: string }) {
+  get() {
     return {
-      contentType: "application/json",
-      data: JSON.stringify({
-        hello: query.test || "world"
-      })
+      contentType: "text/plain",
+      data: new Date().toISOString()
     };
   }
 };
