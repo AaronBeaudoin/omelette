@@ -17,31 +17,34 @@
 
 For a deep dive into the chemistry behind why these ingredient were chosen see the _NAME_ section below.
 
+## Table of Contents
 
-## 🐣 Getting Started
+- [**Getting Started**](#🐣-getting-started)
 
-1. Clone this repository.
+# 🐣 Getting Started
+
+1. **Clone** this repository.
 
 ```
 git clone https://github.com/AaronBeaudoin/omelette
 ```
 
-2. Install project dependencies.
+2. **Install** project dependencies.
 
 ```
 npm install
 ```
 
-3. Run the development setup.
+3. **Run** the development setup.
 
 ```
 npm run dev
 ```
 
-4. Explore the project! Read on below for more explanation on how it is structured.
+4. **Explore** the project and make it your own! ✨
 
 
-## Deployment
+## 🚀 — Deployment
 
 
 <!--
