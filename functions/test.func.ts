@@ -5,7 +5,7 @@ export default {
 
     return {
       contentType: response.headers.get("Content-Type"),
-      data: (await response.blob()).stream()
+      body: response.body
     };
   }
 };

@@ -2,7 +2,7 @@ export default {
   get(query: { [key: string]: string }) {
     return {
       contentType: "application/json",
-      data: JSON.stringify({
+      body: JSON.stringify({
         hello: query.test || "world"
       })
     };

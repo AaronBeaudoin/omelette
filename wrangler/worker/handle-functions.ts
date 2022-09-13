@@ -5,7 +5,7 @@ import { Environment } from "./types";
 import manifest from "./_manifest";
 
 type Query = { [key: string]: string };
-type Result = { contentType: string, data: string | ReadableStream };
+type Result = { contentType: string, body: string | ReadableStream };
 
 function getFunctionConfig(path: string) {
   const strongPath = path as keyof typeof manifest;
@@ -40,14 +40,22 @@ function getFunctionHandler(func: Function) {
     catch { return "FUNCTION_ERROR"; }
 
     if (!result) return "FUNCTION_RESULT";
-    if (!result.data) return "FUNCTION_DATA";
+    if (!result.body) return "FUNCTION_DATA";
     if (!result.contentType) return "FUNCTION_TYPE";
 
     return {
       contentType: result.contentType,
-      data: result.data
+      body: result.body
     } as Result;
   };
+}
+
+async function getResultStreams(result: Result, env: Environment) {
+  if (typeof result.body === "string") return [result.body, result.body] as string[];
+  if (!("DEV" in env)) return result.body.tee() as ReadableStream[];
+
+  // Fixes a bug with `wrangler dev --local` which occurs when `KV.put` is passed a stream.
+  return await (async _ => [await new Response(_[0]).arrayBuffer(), _[1]])(result.body.tee());
 }
 
 function getStoreKey(path: string, query: Query) {
@@ -55,10 +63,16 @@ function getStoreKey(path: string, query: Query) {
   return path + (queryString.length ? "?" + queryString : ""); 
 }
 
-function setStoreValue(env: Environment, key: string, result: Result, cache: boolean | number) {
-  return env.DATA.put(key, result.data, {
+function setStoreValue(
+  env: Environment,
+  key: string,
+  data: string | ReadableStream | ArrayBuffer,
+  contentType: string,
+  cache: boolean | number
+) {
+  return env.DATA.put(key, data, {
     expirationTtl: typeof cache === "number" && cache >= 60 ? cache : undefined,
-    metadata: { contentType: result.contentType }
+    metadata: { contentType: contentType }
   });
 }
 
@@ -68,7 +82,7 @@ async function getStoreValue(env: Environment, key: string) {
 
   return {
     contentType: result.metadata.contentType,
-    data: result.value
+    body: result.value
   } as Result;
 }
 
@@ -83,6 +97,7 @@ export async function handleFunctionRoute(
 
   // 2. Ensure path is a function route.
   if (!url.path.startsWith("/fn")) return null;
+  console.log("test", url.path);
 
   // 3. Ensure a function exists at path.
   if (!(url.path in manifest)) return new Response(null, { status: 404 });
@@ -98,7 +113,7 @@ export async function handleFunctionRoute(
     const refresh = async (key: string) => {
       const result = await handler(query);
       if (typeof result === "string") return;
-      await setStoreValue(env, key, result, cache);
+      await setStoreValue(env, key, result.body, result.contentType, cache);
     };
   
     context.waitUntil(refresh(getStoreKey(url.path, query)));
@@ -111,7 +126,7 @@ export async function handleFunctionRoute(
     const key = getStoreKey(url.path, query);
     const result = await getStoreValue(env, key);
 
-    if (result) return new Response(result.data, {
+    if (result) return new Response(result.body, {
       status: 200,
       headers: {
         "Content-Type": result.contentType,
@@ -122,18 +137,19 @@ export async function handleFunctionRoute(
 
   // 7. Run function handler.
   const result = await handler(query);
-
-  // 8. Handle function errors.
   if (typeof result === "string") return new Response(result, { status: 500 });
+
+  // 8. Split data into two independent streams.
+  const resultStreams = await getResultStreams(result, env);
 
   // 9. Cache result if applicable.
   if (cache && !preview) {
     const key = getStoreKey(url.path, query);
-    context.waitUntil(setStoreValue(env, key, result, cache));
+    context.waitUntil(setStoreValue(env, key, resultStreams[0], result.contentType, cache));
   }
 
   // 10. Return result.
-  return new Response(result.data, {
+  return new Response(resultStreams[1], {
     status: 200,
     headers: {
       "Content-Type": result.contentType || "text/plain",

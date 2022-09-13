@@ -3,7 +3,7 @@ export default {
   get() {
     return {
       contentType: "text/plain",
-      data: new Date().toISOString()
+      body: new Date().toISOString()
     };
   }
 };

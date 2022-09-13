@@ -1,10 +1,43 @@
 # Omelette
 
-**Omelette** is an opinionated _recipe_ to give you an _example_ of how to build fast, dynamic web applications. I created it to save you dozens _or more_ hours of research and experimenting by jump-starting you with:
+**Omelette** is an opinionated _recipe_ that demonstrates how to build a fast dynamic website/application. It was created as a base for real-world applications and jump-starts you with:
 
-- A **flexible project/deployment architecture** I use for my own production websites.
-- Hand-picked, **robust tools and libraries** for painless development (Vite, Vue).
+- A **flexible project/deployment architecture** used for production websites.
+- Hand-picked **robust tools and libraries** for painless development (Vite, Vue).
 - A cost-effective, performant, and **scalable deployment platform** (Cloudflare Workers).
+
+
+## Core Ingredients
+
+- [**`vite-plugin-ssr`**](https://vite-plugin-ssr.com) — Lightweight SSR Plugin
+- [**Vite**](https://vitejs.dev) — Development and Bundle/Build Tooling
+- [**Vue**](https://vuejs.org) — Easy Yet Powerful Front-End UI Framework
+- [**UnoCSS**](https://uno.antfu.me) — Tailwind-Compatible Atomic CSS Engine
+- [**Cloudflare Workers**](https://workers.cloudflare.com) — Cutting-Edge Deployment Platform
+
+
+## Getting Started
+
+1. Clone this repository.
+
+```
+git clone https://github.com/AaronBeaudoin/omelette
+```
+
+2. Install dependencies.
+
+```
+npm install
+```
+
+3. Run the development server.
+
+```
+npm run dev
+```
+
+
+<!--
 
 ## The Story
 
