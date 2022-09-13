@@ -9,13 +9,13 @@
 
 ## Core Ingredients
 
-- 🍯 — [**`brillout/vite-plugin-ssr`**](https://vite-plugin-ssr.com) — The binder that causes the recipe to stick together.
+- 🍯 — [**`brillout/vite-plugin-ssr`**](https://vite-plugin-ssr.com) — The binding agent that makes everything stick!
 - 🥘 — [**`vitejs/vite`**](https://vitejs.dev) — The base that gives the recipe its delicious flavor.
 - 🍫 — [**`vuejs/core`**](https://vuejs.org) — The sweetener that makes the recipe so good.
 - 🍇 — [**`unocss/unocss`**](https://uno.antfu.me) — The garnish for decorating the recipe.
 - 🍽 — [**Cloudflare Workers**](https://workers.cloudflare.com) — The dish for serving the recipe.
 
-For a deep dive into the chemistry behind why these ingredient were chosen see the _NAME_ section below.
+For a less silly deep dive into the reasoning behind why these ingredient were chosen, see the [**chemistry**](#-the-chemistry) section below. It also goes into some of the custom features built into the project.
 
 ## Table of Contents
 
@@ -23,7 +23,7 @@ For a deep dive into the chemistry behind why these ingredient were chosen see t
   Start exploring Omelette for yourself!
 - [**Deployment**](#-deployment)  
   Learn how to deploy an Omelette project.
-- [**The Chemistry**](#-rationale)  
+- [**The Chemistry**](#-the-chemistry)  
   Learn why each ingredient was chosen.
 
 # 🐣 Getting Started
@@ -107,7 +107,9 @@ For a deep dive into the chemistry behind why these ingredient were chosen see t
 4. **Push a new commit!** From now on, pushing to the `main` branch of your repository should use the `.github/workflows/deploy.yaml` [GitHub Action](https://docs.github.com/en/actions) to deploy your project automatically!
 
 
+# ⚗️ The Chemistry
 
+This section is a _work in progress_.
 
 
 <!--
