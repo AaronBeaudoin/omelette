@@ -107,7 +107,7 @@ For a less silly deep dive into the reasoning behind why these ingredient were c
 4. **Push a new commit!** From now on, pushing to the `main` branch of your repository should use the `.github/workflows/deploy.yaml` [GitHub Action](https://docs.github.com/en/actions) to deploy your project automatically!
 
 
-# ⚗️ The Chemistry
+# 🥼 The Chemistry
 
 This section is a _work in progress_.
 
