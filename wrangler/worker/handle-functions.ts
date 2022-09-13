@@ -33,11 +33,14 @@ function getFunctionQuery(query: Query, env: Environment) {
 }
 
 function getFunctionHandler(func: Function) {
-  return async (query: Query) => {
+  return async (query: Query, call: Function) => {
     let result = null;
 
-    try { result = await func(query); }
-    catch { return "FUNCTION_ERROR"; }
+    try { result = await func(query, call); }
+    catch (error) {
+      console.log(error);
+      return "FUNCTION_ERROR";
+    }
 
     if (!result) return "FUNCTION_RESULT";
     if (!result.body) return "FUNCTION_DATA";
@@ -88,6 +91,27 @@ async function getStoreValue(env: Environment, key: string) {
   } as Result;
 }
 
+function getInternalFetch(
+  url: ReturnType<typeof getParsedUrl>,
+  env: Environment,
+  context: ExecutionContext
+) {
+  return async (
+    resource: string,
+    options: RequestInit & {
+      preview: boolean,
+      refresh: boolean
+    }
+  ) => {
+    let requestUrl = new URL(url._standardUrl.origin + resource);
+    if (options.preview) requestUrl.searchParams.append("preview", env.SECRET || "");
+    if (options.refresh) requestUrl.searchParams.append("refresh", env.SECRET || "");
+
+    const request = new Request(requestUrl, options);
+    return await handleFunctionRoute(request, env, context);
+  };
+}
+
 export async function handleFunctionRoute(
   request: Request,
   env: Environment,
@@ -99,7 +123,6 @@ export async function handleFunctionRoute(
 
   // 2. Ensure path is a function route.
   if (!url.path.startsWith("/fn")) return null;
-  console.log("test", url.path);
 
   // 3. Ensure a function exists at path.
   if (!(url.path in manifest)) return new Response(null, { status: 404 });
@@ -113,7 +136,7 @@ export async function handleFunctionRoute(
   if (cache && refresh) {
 
     const refresh = async (key: string) => {
-      const result = await handler(query);
+      const result = await handler(query, getInternalFetch(url, env, context));
       if (typeof result === "string") return;
       await setStoreValue(env, key, result.body, result.contentType, cache);
     };
@@ -138,7 +161,7 @@ export async function handleFunctionRoute(
   }
 
   // 7. Run function handler.
-  const result = await handler(query);
+  const result = await handler(query, getInternalFetch(url, env, context));
   if (typeof result === "string") return new Response(result, { status: 500 });
 
   // 8. Split data into two independent streams.
