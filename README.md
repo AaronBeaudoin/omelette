@@ -17,6 +17,7 @@
 
 For a less silly deep dive into the reasoning behind why these ingredient were chosen, see the [**chemistry**](#-the-chemistry) section below. It also goes into some of the custom features built into the project.
 
+
 ## Table of Contents
 
 - [**Getting Started**](#-getting-started)  
@@ -26,7 +27,11 @@ For a less silly deep dive into the reasoning behind why these ingredient were c
 - [**The Chemistry**](#-the-chemistry)  
   Learn why each ingredient was chosen.
 
-# 🐣 Getting Started
+
+<br> <!-- ———————————————————————————————————————————————————————————————————————————————————————————————————— -->
+
+
+## 🐣 Getting Started
 
 1. **Clone** this repository.
 
@@ -49,7 +54,10 @@ For a less silly deep dive into the reasoning behind why these ingredient were c
 4. **Explore** the project and make it your own! ✨
 
 
-# 🚀 Deployment
+<br> <!-- ———————————————————————————————————————————————————————————————————————————————————————————————————— -->
+
+
+## 🚀 Deployment
 
 1. **Create a Cloudflare account** that you can deploy to, if you don't already have one. After doing so, make sure to go to the **Workers** page in the dashboard and complete the setup steps.
 
@@ -96,7 +104,7 @@ For a less silly deep dive into the reasoning behind why these ingredient were c
     ```
 
 
-## Deploy on Push
+### Deploy on Push
 
 1. **Create an API token** in your Cloudflare account [here](https://dash.cloudflare.com/profile/api-tokens). If you're not sure exactly what permissions you want, just use the **Edit Cloudflare Workers** template.
 
@@ -107,7 +115,10 @@ For a less silly deep dive into the reasoning behind why these ingredient were c
 4. **Push a new commit!** From now on, pushing to the `main` branch of your repository should use the `.github/workflows/deploy.yaml` [GitHub Action](https://docs.github.com/en/actions) to deploy your project automatically!
 
 
-# 🥼 The Chemistry
+<br> <!-- ———————————————————————————————————————————————————————————————————————————————————————————————————— -->
+
+
+## 🥼 The Chemistry
 
 This section is a _work in progress_.
 
