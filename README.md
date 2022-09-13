@@ -1,6 +1,6 @@
 # Omelette
 
-**Omelette** is an opinionated _recipe_ (or example project) to help _show you_ how to build fast, dynamic web applications. I created it to save you dozens _or more_ hours of research and experimenting by jump-starting you with:
+**Omelette** is an opinionated _recipe_ to give you an _example_ of how to build fast, dynamic web applications. I created it to save you dozens _or more_ hours of research and experimenting by jump-starting you with:
 
 - A **flexible project/deployment architecture** I use for my own production websites.
 - Hand-picked, **robust tools and libraries** for painless development (Vite, Vue).
