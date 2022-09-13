@@ -1,6 +1,6 @@
-# Omelette
+# 🍳 Omelette
 
-**Omelette** is an opinionated _recipe_ that demonstrates how to build a fast dynamic website/application. It was created as a base for real-world applications and jump-starts you with:
+**Omelette** is an opinionated _recipe_ that demonstrates how to build a fast dynamic website/application. It was created as a foundation for a real-world ecommerce website and jump-starts you with:
 
 - A **flexible project/deployment architecture** used for production websites.
 - Hand-picked **robust tools and libraries** for painless development (Vite, Vue).
@@ -24,17 +24,22 @@
 git clone https://github.com/AaronBeaudoin/omelette
 ```
 
-2. Install dependencies.
+2. Install project dependencies.
 
 ```
 npm install
 ```
 
-3. Run the development server.
+3. Run the development setup.
 
 ```
 npm run dev
 ```
+
+4. Explore the project! Read on below for more explanation on how it is structured.
+
+
+## Deployment
 
 
 <!--
@@ -126,3 +131,5 @@ Issues are listed in order of most problematic to least problematic. All issues 
 Automatically include some common useful dependencies.
 
 `lodash`, `date-fns`, `xregexp`, `@vueuse/core`, `vue-imask`
+
+-->
