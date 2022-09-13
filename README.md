@@ -24,7 +24,7 @@ For a less silly deep dive into the reasoning behind why these ingredient were c
 <br> <!-- ———————————————————————————————————————————————————————————————————————————————————————————————————— -->
 
 
-## 📖 Table of Contents
+## 📙 Table of Contents
 
 - [**Getting Started**](#-getting-started)  
   Start exploring Omelette for yourself!
