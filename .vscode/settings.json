@@ -1,0 +1,15 @@
+{
+  "files.exclude": {
+    "./node_modules/": true,
+    "./.vscode/": true,
+    "./.github/": true,
+    "./.gitignore": true,
+    "./package-lock.json": true,
+    "./wrangler/worker/_manifest.ts": true,
+    "./wrangler/worker.mjs": true,
+    "./dist/": true
+  },
+  "markdown.styles": [
+    ".vscode/markdown.css"
+  ]
+}
