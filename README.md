@@ -19,32 +19,95 @@ For a deep dive into the chemistry behind why these ingredient were chosen see t
 
 ## Table of Contents
 
-- [**Getting Started**](#-getting-started)
+- [**Getting Started**](#-getting-started)  
+  Start exploring Omelette for yourself!
+- [**Deployment**](#-deployment)  
+  Learn how to deploy an Omelette project.
+- [**The Chemistry**](#-rationale)  
+  Learn why each ingredient was chosen.
 
 # 🐣 Getting Started
 
 1. **Clone** this repository.
 
-```
-git clone https://github.com/AaronBeaudoin/omelette
-```
+    ```
+    $ git clone https://github.com/AaronBeaudoin/omelette
+    ```
 
 2. **Install** project dependencies.
 
-```
-npm install
-```
+    ```
+    $ npm install
+    ```
 
 3. **Run** the development setup.
 
-```
-npm run dev
-```
+    ```
+    $ npm run dev
+    ```
 
 4. **Explore** the project and make it your own! ✨
 
 
-## 🚀 — Deployment
+# 🚀 Deployment
+
+1. **Create a Cloudflare account** that you can deploy to, if you don't already have one. After doing so, make sure to go to the **Workers** page in the dashboard and complete the setup steps.
+
+2. **Login to [Wrangler](https://developers.cloudflare.com/workers/wrangler/get-started)**, the CLI for working with Cloudflare Workers.
+
+    ```
+    $ npx wrangler login
+    ```
+
+3. **Create a [Workers KV](https://developers.cloudflare.com/workers/learning/how-kv-works) namespace** for production and another one for preview.
+
+    ```
+    $ npx wrangler kv:namespace create PRODUCTION
+    $ npx wrangler kv:namespace create PREVIEW
+    ```
+
+4. **Bind the namespaces** to `DATA` in your worker environment. To do this, replace `id` under `[[kv_namespaces]]` in your `wrangler.toml` config with the ID of the `PRODUCTION` namespace you just created and replace `preview_id` with the ID of the `PREVIEW` namespace.
+
+    ```toml
+    [[kv_namespaces]]
+    id = "<your-production-namespace-id-here>"
+    preview_id = "<your-preview-namespace-id-here>"
+    binding = "DATA"
+    ```
+
+   The ID for each namespace should be in the terminal output under each command from the last step. If you can't find them, you can easily get them again via another command.
+
+   ```
+   $ npx wrangler kv:namespace list
+   ```
+
+5. **Update `name`** in your `wrangler.toml` to whatever you want.
+
+6. **Preview your build output** before actually deploying.
+
+    ```
+    $ npm run preview
+    ```
+
+7. **Deploy your project** and sit back and relax! 🍹
+
+    ```
+    $ npm run deploy
+    ```
+
+
+## Deploy on Push
+
+1. **Create an API token** in your Cloudflare account [here](https://dash.cloudflare.com/profile/api-tokens). If you're not sure exactly what permissions you want, just use the **Edit Cloudflare Workers** template.
+
+2. **Copy the token into a [GitHub Secret](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)** called `CLOUDFLARE_API_TOKEN` under your repository.
+
+3. **Copy your account ID into a [GitHub Secret](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)** called `CLOUDFLARE_ACCOUNT_ID` under your repository. You can find your Cloudflare account ID on the right hand side of the **Workers** page in the dashboard.
+
+4. **Push a new commit!** From now on, pushing to the `main` branch of your repository should use the `.github/workflows/deploy.yaml` [GitHub Action](https://docs.github.com/en/actions) to deploy your project automatically!
+
+
+
 
 
 <!--
