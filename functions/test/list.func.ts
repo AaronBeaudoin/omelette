@@ -1,5 +1,5 @@
 export default {
-  async get(query: { [key: string]: string }, call: typeof fetch) {
+  async get(query: { [key: string]: string }, call: any) {
     return {
       contentType: "application/json",
       body: JSON.stringify(await Promise.all([
@@ -7,7 +7,7 @@ export default {
         "Product B",
         "Product C"
       ].map(async name => {
-        let response = await call(`/fn/test/get?name=${name}`);
+        let response = await call(`/fn/test/get?name=${name}`, { preview: true });
         return await response.json();
       })))
     };

@@ -99,9 +99,9 @@ function getInternalFetch(
   return async (
     resource: string,
     options: RequestInit & {
-      preview: boolean,
-      refresh: boolean
-    }
+      preview?: boolean,
+      refresh?: boolean
+    } = {}
   ) => {
     let requestUrl = new URL(url._standardUrl.origin + resource);
     if (options.preview) requestUrl.searchParams.append("preview", env.SECRET || "");

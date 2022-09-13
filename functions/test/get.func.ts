@@ -1,8 +1,9 @@
 export default {
-  async get(query: { [key: string]: string }) {
+  cache: true,
+  get(query: { [key: string]: string }) {
     return {
       contentType: "application/json",
-      body: JSON.stringify(query.name + " Extra")
+      body: JSON.stringify(query.name + " " + new Date().toISOString())
     };
   }
 };
