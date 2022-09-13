@@ -2,19 +2,14 @@ import fileSystem from "fs";
 import esbuild from "esbuild";
 import chalk from "chalk";
 
-type Config = {
-  secret: string | undefined,
-  debug: boolean
-};
-
-(async (config: Config) => {
+(async _ => {
   await esbuild.build({
     platform: "browser",
     conditions: ["worker"],
     target: "es2020",
     format: "esm",
     bundle: true,
-    minify: !config.debug,
+    minify: true,
     
     entryPoints: [`${__dirname}/worker/index.ts`],
     outfile: `${__dirname}/worker.mjs`,
@@ -34,8 +29,4 @@ type Config = {
   
   const stat = fileSystem.statSync(`${__dirname}/worker.mjs`);
   console.log(`${chalk.blue('BUILD')} worker.mjs ${stat.size / 1000} KB`);
-
-})({
-  secret: process.env.FUNCTIONS_SECRET,
-  debug: !!process.env.FUNCTIONS_DEBUG
-});
+})();

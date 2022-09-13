@@ -2,12 +2,7 @@ import fileSystem from "fs";
 import glob from "glob";
 import chalk from "chalk";
 
-type Config = {
-  secret: string | undefined,
-  debug: boolean
-};
-
-(async (config: Config) => {
+(async _ => {
   const root = __dirname.replace(/\/wrangler$/, "");
   const functionGlob = `${root}/functions/**/*.func.{ts,js}`;
   const functionManifest: { [key: string]: string } = {};
@@ -37,8 +32,4 @@ type Config = {
   const functionModulePath = `${__dirname}/worker/_manifest.ts`;
   fileSystem.writeFileSync(functionModulePath, functionModuleText);
   console.log(`${chalk.blue('BUILD')} _manifest.ts`);
-
-})({
-  secret: process.env.FUNCTIONS_SECRET,
-  debug: !!process.env.FUNCTIONS_DEBUG
-});
+})();
