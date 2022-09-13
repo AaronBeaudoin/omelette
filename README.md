@@ -2,21 +2,23 @@
 
 **Omelette** is an opinionated _recipe_ that demonstrates how to build a fast dynamic website/application. It was created as a foundation for a real-world ecommerce website and jump-starts you with:
 
-- A **flexible project/deployment architecture** used for production websites.
-- Hand-picked **robust tools and libraries** for painless development (Vite, Vue).
-- A cost-effective, performant, and **scalable deployment platform** (Cloudflare Workers).
+- A **flexible architecture** suitable for production websites.
+- Hand-picked **tools and libraries** for painless development.
+- A cost-effective and scalable **preset deployment platform**.
 
 
 ## Core Ingredients
 
-- [**`vite-plugin-ssr`**](https://vite-plugin-ssr.com) — Lightweight SSR Plugin
-- [**Vite**](https://vitejs.dev) — Development and Bundle/Build Tooling
-- [**Vue**](https://vuejs.org) — Easy Yet Powerful Front-End UI Framework
-- [**UnoCSS**](https://uno.antfu.me) — Tailwind-Compatible Atomic CSS Engine
-- [**Cloudflare Workers**](https://workers.cloudflare.com) — Cutting-Edge Deployment Platform
+- 🍯 — [**`brillout/vite-plugin-ssr`**](https://vite-plugin-ssr.com) — The binder that causes the recipe to stick together.
+- 🥘 — [**`vitejs/vite`**](https://vitejs.dev) — The base that gives the recipe its delicious flavor.
+- 🍫 — [**`vuejs/core`**](https://vuejs.org) — The sweetener that makes the recipe so good.
+- 🍇 — [**`unocss/unocss`**](https://uno.antfu.me) — The garnish for decorating the recipe.
+- 🍽 — [**Cloudflare Workers**](https://workers.cloudflare.com) — The dish for serving the recipe.
+
+For a deep dive into the chemistry behind why these ingredient were chosen see the _NAME_ section below.
 
 
-## Getting Started
+## 🐣 Getting Started
 
 1. Clone this repository.
 
