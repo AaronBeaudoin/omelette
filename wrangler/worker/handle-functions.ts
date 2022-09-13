@@ -51,11 +51,13 @@ function getFunctionHandler(func: Function) {
 }
 
 async function getResultStreams(result: Result, env: Environment) {
-  if (typeof result.body === "string") return [result.body, result.body] as string[];
-  if (!("DEV" in env)) return result.body.tee() as ReadableStream[];
+  if (typeof result.body === "string") return (_ => [_, _])(result.body);
 
-  // Fixes a bug with `wrangler dev --local` which occurs when `KV.put` is passed a stream.
-  return await (async _ => [await new Response(_[0]).arrayBuffer(), _[1]])(result.body.tee());
+  let streams = result.body.tee();
+  if (!("DEV" in env)) return streams;
+
+  // https://github.com/cloudflare/miniflare/issues/375
+  return [await new Response(streams[0]).arrayBuffer(), streams[1]];
 }
 
 function getStoreKey(path: string, query: Query) {
