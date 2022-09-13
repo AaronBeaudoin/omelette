@@ -28,7 +28,7 @@ function pipeToWritable(page: any) {
 
 export async function render(pageContext: PageContext) {
   const title = pageContext.exports.title ? pageContext.exports.title + " — " : "";
-  const faviconUrl = import.meta.env.BASE_URL + "logo.svg";
+  const faviconUrl = import.meta.env.BASE_URL + "favicon.png";
 
   const modeHandlers: Record<string, ServerPageModeHandler> = {
     "server-and-client": page => pipeToWritable(page),
@@ -45,7 +45,7 @@ export async function render(pageContext: PageContext) {
       <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-        <title>${title}VPS Starter</title>
+        <title>${title}Omelette</title>
         <link rel="icon" href="${faviconUrl}">
       </head>
       <body>

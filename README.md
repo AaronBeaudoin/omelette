@@ -18,7 +18,7 @@
 - 🍇 — [**`unocss/unocss`**](https://uno.antfu.me) — The garnish for decorating the recipe.
 - 🍽 — [**Cloudflare Workers**](https://workers.cloudflare.com) — The dish for serving the recipe.
 
-For a less silly deep dive into the reasoning behind why these ingredient were chosen, see the [**chemistry**](#-the-chemistry) section below. It also goes into some of the custom features built into the project.
+For a less silly deep dive into the reasoning behind why these ingredients were chosen over potential alternatives, see the [**chemistry**](#-the-chemistry) section below. The section also explains some of the recipe's custom features.
 
 
 <br> <!-- ———————————————————————————————————————————————————————————————————————————————————————————————————— -->
@@ -65,7 +65,7 @@ For a less silly deep dive into the reasoning behind why these ingredient were c
 
 ## 🚀 Deployment
 
-1. **Create a Cloudflare account** that you can deploy to, if you don't already have one. After doing so, make sure to go to the **Workers** page in the dashboard and complete the setup steps.
+1. **Create a Cloudflare account** [here](https://dash.cloudflare.com/sign-up) if you don't already have one. After doing so, make sure to go to the **Workers** page in the dashboard and complete the setup steps.
 
 2. **Login to [Wrangler](https://developers.cloudflare.com/workers/wrangler/get-started)**, the CLI for working with Cloudflare Workers.
 
@@ -95,22 +95,28 @@ For a less silly deep dive into the reasoning behind why these ingredient were c
    $ npx wrangler kv:namespace list
    ```
 
-5. **Update `name`** in your `wrangler.toml` to whatever you want.
+5. **Update the name** of your worker in your `wrangler.toml` config to whatever you want.
 
-6. **Preview your build output** before actually deploying.
+6. **Create a [Workers Secret](https://developers.cloudflare.com/workers/platform/environment-variables/#adding-secrets-via-wrangler)** named `SECRET` to enable function `?preview=` and `?refresh=`.
+
+    ```
+    $ npx wrangler secret put SECRET
+    ```
+
+7. **Preview your build output** before actually deploying, if you want.
 
     ```
     $ npm run preview
     ```
 
-7. **Deploy your project** and sit back and relax! 🍹
+8. **Deploy your project** and sit back and relax! Watch a movie. Whatever you want! 🍹
 
     ```
     $ npm run deploy
     ```
 
 
-### Deploy on Push
+### Deploy on Push — _Optional_
 
 1. **Create an API token** in your Cloudflare account [here](https://dash.cloudflare.com/profile/api-tokens). If you're not sure exactly what permissions you want, just use the **Edit Cloudflare Workers** template.
 

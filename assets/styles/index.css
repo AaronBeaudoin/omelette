@@ -1,3 +1,16 @@
 html, body, #page {
   height: 100%;
 }
+
+.markdown-body a {
+  text-decoration: underline;
+}
+
+.markdown-body p:not(:first-child) {
+  margin-top: 1rem;
+}
+
+.markdown-body h1 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
