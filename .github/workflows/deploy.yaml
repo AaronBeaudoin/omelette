@@ -2,14 +2,26 @@ name: CI/CD
 on: { push: { branches: [main] } }
 
 env:
-  CLOUDFLARE_API_TOKEN: "${{ secrets.CLOUDFLARE_API_TOKEN }}"
-  CLOUDFLARE_ACCOUNT_ID: "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}"
+  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
 
 jobs:
+  secrets:
+    name: Secrets
+    runs-on: ubuntu-latest
+    outputs: { exists: "${{ steps.check.outputs.flag }}" }
+    steps:
+
+      - id: check
+        if: ${{ env.CLOUDFLARE_API_TOKEN != '' }}
+        run: echo "::set-output name=flag::true"
+
+
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    if: "${{ env.CLOUDFLARE_API_TOKEN != '' }}"
+    if: needs.secrets.outputs.exists == "true"
     steps:
 
       - name: 1. Checkout Repository
