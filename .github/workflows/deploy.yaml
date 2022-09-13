@@ -15,13 +15,13 @@ jobs:
 
       - id: check
         if: ${{ env.CLOUDFLARE_API_TOKEN != '' }}
-        run: echo "::set-output name=flag::true"
+        run: echo "::set-output name=flag::EXISTS"
 
 
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    if: needs.secrets.outputs.exists == "true"
+    if: needs.secrets.outputs.exists
     steps:
 
       - name: 1. Checkout Repository
