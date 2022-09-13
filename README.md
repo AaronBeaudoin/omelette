@@ -21,6 +21,9 @@
 For a less silly deep dive into the reasoning behind why these ingredient were chosen, see the [**chemistry**](#-the-chemistry) section below. It also goes into some of the custom features built into the project.
 
 
+<br> <!-- ———————————————————————————————————————————————————————————————————————————————————————————————————— -->
+
+
 ## Table of Contents
 
 - [**Getting Started**](#-getting-started)  
