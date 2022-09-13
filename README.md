@@ -19,7 +19,7 @@ For a deep dive into the chemistry behind why these ingredient were chosen see t
 
 ## Table of Contents
 
-- [**Getting Started**](#🐣-getting-started)
+- [**Getting Started**](#-getting-started)
 
 # 🐣 Getting Started
 
