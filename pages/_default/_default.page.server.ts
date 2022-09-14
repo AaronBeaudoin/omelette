@@ -28,7 +28,6 @@ function pipeToWritable(page: any) {
 
 export async function render(pageContext: PageContext) {
   const title = pageContext.exports.title ? pageContext.exports.title + " — " : "";
-  const faviconUrl = import.meta.env.BASE_URL + "favicon.png";
 
   const modeHandlers: Record<string, ServerPageModeHandler> = {
     "server-and-client": page => pipeToWritable(page),
@@ -46,7 +45,7 @@ export async function render(pageContext: PageContext) {
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
         <title>${title}Omelette</title>
-        <link rel="icon" href="${faviconUrl}">
+        <link rel="icon" href="/favicon.png">
       </head>
       <body>
         <!-- Page is rendered inside this root element. -->

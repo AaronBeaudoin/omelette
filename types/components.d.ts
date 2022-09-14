@@ -7,8 +7,6 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    MyExampleComponent: typeof import('./../components/ExampleComponent.vue')['default']
     MyExampleMarkdown: typeof import('./../components/ExampleMarkdown.md')['default']
-    VectorLogo: typeof import('./../assets/vectors/logo.svg?component')['default']
   }
 }

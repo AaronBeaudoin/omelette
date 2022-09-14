@@ -1,9 +1,13 @@
 {
   "compilerOptions": {
+
+    // Must be set to `true` due to `esbuild` limitations.
+    // https://vitejs.dev/guide/features.html#isolatedmodules
+    "isolatedModules": true,
+
     "strict": true,
     "module": "ES2020",
     "moduleResolution": "node",
-    "isolatedModules": true,
     "target": "ES2017",
     "lib": ["DOM", "ESNext"],
     "skipLibCheck": true,

@@ -2,9 +2,14 @@ import { getPageMode, createPageApp } from "./app";
 import { ClientPageModeHandler } from "./app";
 import { PageContext } from "./types";
 
+// Styling-related imports.
 import "@unocss/reset/tailwind.css";
 import "/assets/styles/index.css";
 import "uno.css";
+
+// Client-side helper imports.
+import "/assets/helpers/hover";
+import "/assets/helpers/viewport";
 
 export async function render(pageContext: PageContext) {
   const modeHandlers: Record<string, ClientPageModeHandler> = {
