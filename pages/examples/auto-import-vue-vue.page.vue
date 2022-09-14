@@ -1,3 +1,0 @@
-<template>
-  <MyExampleComponent/>
-</template>

@@ -225,4 +225,10 @@ Automatically include some common useful dependencies.
 
 `lodash`, `date-fns`, `xregexp`, `@vueuse/core`, `vue-imask`
 
+
+### Recommended Services/Platforms for Common Needs
+
+- Forms: KwesForms
+- CMS: Directus
+
 -->
