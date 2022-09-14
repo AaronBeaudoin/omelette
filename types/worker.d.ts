@@ -1,6 +1,6 @@
 interface Environment {
   SECRET?: string,
-  DATA: KVNamespace,
+  FUNCTIONS: KVNamespace,
   __STATIC_CONTENT: KVNamespace
 }
 

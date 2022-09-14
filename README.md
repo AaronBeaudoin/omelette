@@ -80,13 +80,13 @@ For a less silly deep dive into the reasoning behind why these ingredients were 
     $ npx wrangler kv:namespace create PREVIEW
     ```
 
-4. **Bind the namespaces** to `DATA` in your worker environment. To do this, replace `id` under `[[kv_namespaces]]` in your `wrangler.toml` config with the ID of the `PRODUCTION` namespace you just created and replace `preview_id` with the ID of the `PREVIEW` namespace.
+4. **Bind the namespaces** to `FUNCTIONS` in your worker environment. To do this, replace `id` under `[[kv_namespaces]]` in your `wrangler.toml` config with the ID of the `PRODUCTION` namespace you just created and replace `preview_id` with the ID of the `PREVIEW` namespace.
 
     ```toml
     [[kv_namespaces]]
     id = "<your-production-namespace-id-here>"
     preview_id = "<your-preview-namespace-id-here>"
-    binding = "DATA"
+    binding = "FUNCTIONS"
     ```
 
    The ID for each namespace should be in the terminal output under each command from the last step. If you can't find them, you can easily get them again via another command.

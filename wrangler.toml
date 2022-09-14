@@ -12,4 +12,4 @@ port = 3000
 [[kv_namespaces]]
 id = "501133c6aac0469fa0d0b603d7948bd1"
 preview_id = "c6720ef5223a41a2bdd78ed8def6b48f"
-binding = "DATA"
+binding = "FUNCTIONS"

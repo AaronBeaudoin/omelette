@@ -76,14 +76,14 @@ function setStoreValue(
   contentType: string,
   cache: boolean | number
 ) {
-  return env.DATA.put(key, data, {
+  return env.FUNCTIONS.put(key, data, {
     expirationTtl: typeof cache === "number" && cache >= 60 ? cache : undefined,
     metadata: { contentType: contentType }
   });
 }
 
 async function getStoreValue(env: Environment, key: string) {
-  const result = await env.DATA.getWithMetadata<any>(key, { type: "stream" });
+  const result = await env.FUNCTIONS.getWithMetadata<any>(key, { type: "stream" });
   if (!result.value || !result.metadata?.contentType) return;
 
   return {
