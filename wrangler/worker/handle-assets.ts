@@ -1,15 +1,15 @@
 import { getAssetFromKV } from "@cloudflare/kv-asset-handler";
-import { Environment } from "./types";
+import { getParsedResource } from "./helpers";
 
 import assetManifestString from "__STATIC_CONTENT_MANIFEST";
 const assetManifest = JSON.parse(assetManifestString);
 
 export async function handleAssetRoute(
-  request: Request,
+  resource: ReturnType<typeof getParsedResource>,
   env: Environment,
   context: ExecutionContext
 ) {
-  const event = { request: request, waitUntil: (_: Promise<any>) => context.waitUntil(_) };
+  const event = { request: resource.request, waitUntil: (_: Promise<any>) => context.waitUntil(_) };
   const config = { ASSET_NAMESPACE: env.__STATIC_CONTENT, ASSET_MANIFEST: assetManifest };
 
   try { return await getAssetFromKV(event, config); }

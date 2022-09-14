@@ -1,8 +1,5 @@
-import { getParsedUrl } from "./helpers";
-import { Environment } from "./types";
-
-// @ts-ignore
-import manifest from "./_manifest";
+import { getParsedResource } from "./helpers";
+import manifest from "./_manifest"; // @ts-ignore
 
 type Query = { [key: string]: string };
 type Result = { contentType: string, body: string | ReadableStream };
@@ -32,11 +29,15 @@ function getFunctionQuery(query: Query, env: Environment) {
   };
 }
 
-function getFunctionHandler(func: Function) {
-  return async (query: Query, call: Function) => {
+function getFunctionHandler(
+  resource: ReturnType<typeof getParsedResource>,
+  methods: { [method: string]: Function }
+) {
+  const func = methods[resource.request.method.toLowerCase()];
+  return async (query: Query, fetch: Fetch) => {
     let result = null;
 
-    try { result = await func(query, call); }
+    try { result = await func(query, fetch); }
     catch (error) {
       console.log(error);
       return "FUNCTION_ERROR";
@@ -91,64 +92,40 @@ async function getStoreValue(env: Environment, key: string) {
   } as Result;
 }
 
-function getInternalFetch(
-  url: ReturnType<typeof getParsedUrl>,
-  env: Environment,
-  context: ExecutionContext
-) {
-  return async (
-    resource: string,
-    options: RequestInit & {
-      preview?: boolean,
-      refresh?: boolean
-    } = {}
-  ) => {
-    let requestUrl = new URL(url._standardUrl.origin + resource);
-    if (options.preview) requestUrl.searchParams.append("preview", env.SECRET || "");
-    if (options.refresh) requestUrl.searchParams.append("refresh", env.SECRET || "");
-
-    const request = new Request(requestUrl, options);
-    return await handleFunctionRoute(request, env, context);
-  };
-}
-
 export async function handleFunctionRoute(
-  request: Request,
+  resource: ReturnType<typeof getParsedResource>,
   env: Environment,
   context: ExecutionContext
 ) {
 
-  // 1. Parse URL.
-  const url = getParsedUrl(request);
+  // 1. Ensure path is a function route.
+  if (!resource.path.startsWith("/fn")) return null;
 
-  // 2. Ensure path is a function route.
-  if (!url.path.startsWith("/fn")) return null;
+  // 2. Ensure a function exists at path.
+  if (!(resource.path in manifest)) return new Response(null, { status: 404 });
 
-  // 3. Ensure a function exists at path.
-  if (!(url.path in manifest)) return new Response(null, { status: 404 });
+  // 3. Get function config, query, and handler.
+  const { cache, methods } = getFunctionConfig(resource.path);
+  const { preview, refresh, rest: query } = getFunctionQuery(resource.query, env);
+  const handler = getFunctionHandler(resource, methods);
 
-  // 4. Get function config, query, and handler.
-  const { cache, methods } = getFunctionConfig(url.path);
-  const { preview, refresh, rest: query } = getFunctionQuery(url.query, env);
-  const handler = getFunctionHandler(methods[request.method.toLowerCase()]);
-
-  // 5. Handle refresh if applicable.
+  // 4. Handle refresh if applicable.
   if (cache && refresh) {
 
     const refresh = async (key: string) => {
-      const result = await handler(query, getInternalFetch(url, env, context));
+      const result = await handler(query, resource.fetch);
       if (typeof result === "string") return;
       await setStoreValue(env, key, result.body, result.contentType, cache);
     };
   
-    context.waitUntil(refresh(getStoreKey(url.path, query)));
+    context.waitUntil(refresh(getStoreKey(resource.path, query)));
     return new Response("FUNCTION_REFRESH", { status: 200 });
   }
 
-  // 6. Try cache if applicable.
+  // 5. Try cache if applicable.
   if (cache && !preview) {
 
-    const key = getStoreKey(url.path, query);
+    const key = getStoreKey(resource.path, query);
     const result = await getStoreValue(env, key);
 
     if (result) return new Response(result.body, {
@@ -160,20 +137,20 @@ export async function handleFunctionRoute(
     });
   }
 
-  // 7. Run function handler.
-  const result = await handler(query, getInternalFetch(url, env, context));
+  // 6. Run function handler.
+  const result = await handler(query, resource.fetch);
   if (typeof result === "string") return new Response(result, { status: 500 });
 
-  // 8. Split data into two independent streams.
+  // 7. Split data into two independent streams.
   const resultStreams = await getResultStreams(result, env);
 
-  // 9. Cache result if applicable.
+  // 8. Cache result if applicable.
   if (cache && !preview) {
-    const key = getStoreKey(url.path, query);
+    const key = getStoreKey(resource.path, query);
     context.waitUntil(setStoreValue(env, key, resultStreams[0], result.contentType, cache));
   }
 
-  // 10. Return result.
+  // 9. Return result.
   return new Response(resultStreams[1], {
     status: 200,
     headers: {
@@ -183,10 +160,12 @@ export async function handleFunctionRoute(
   });
 }
 
+async function handleRequest(request: Request, env: Environment, context: ExecutionContext) {
+  const resource = getParsedResource(request, env, context, handleRequest);
+  let response = await handleFunctionRoute(resource, env, context);
+  return response || new Response("FUNCTION_ROUTE", { status: 500 });
+}
+
 export default {
-  async fetch(request: Request, env: Environment, context: ExecutionContext) {
-    let response = await handleFunctionRoute(request, env, context);
-    if (!response) response = new Response("FUNCTION_ROUTE", { status: 500 });
-    return response;
-  }
+  fetch: handleRequest
 };

@@ -1,5 +1,5 @@
 export default {
-  get(query: { [key: string]: string }) {
+  get(query: Query) {
     return {
       body: "hello"
     };

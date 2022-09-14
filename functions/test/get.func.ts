@@ -1,6 +1,6 @@
 export default {
   cache: true,
-  get(query: { [key: string]: string }) {
+  get(query: Query) {
     return {
       contentType: "application/json",
       body: JSON.stringify(query.name + " " + new Date().toISOString())
