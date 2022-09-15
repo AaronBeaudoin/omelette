@@ -1,28 +1,21 @@
 // Meet `isolatedModules` requirement.
 export {};
 
-let data = {
-  lastTouchEventTimestamp: 0,
-  type: "touch"
-};
+let currentInputType: string | null = null;
+let lastTouchTimestamp: number | null = null;
+let html = document.documentElement;
 
-let enableTouchInput = () => {
-  console.log("touch");
-  document.addEventListener("mousemove", disableTouchInput, true);
-  data.lastTouchEventTimestamp = new Date().getTime();
-  
-  data.type = "touch";
-  document.documentElement.dataset.input = data.type;
-};
+function onTouch() {
+  document.addEventListener("mousemove", onMouse, true);
+  lastTouchTimestamp = new Date().getTime();
+  html.dataset.input = currentInputType = "touch";
+}
 
-let disableTouchInput = () => {
-  console.log("mouse");
-  document.removeEventListener("mousemove", disableTouchInput, true);
-  if (new Date().getTime() - data.lastTouchEventTimestamp < 500) return;
+function onMouse() {
+  document.removeEventListener("mousemove", onMouse, true);
+  if (new Date().getTime() - (lastTouchTimestamp || 0) < 500) return;
+  html.dataset.input = currentInputType = "mouse";
+}
 
-  data.type = "mouse";
-  document.documentElement.dataset.input = data.type;
-};
-
-document.addEventListener("touchstart", enableTouchInput, true);
-document.addEventListener("mousemove", disableTouchInput, true);
+document.addEventListener("touchstart", onTouch, true);
+document.addEventListener("mousemove", onMouse, true);

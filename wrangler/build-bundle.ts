@@ -3,6 +3,9 @@ import esbuild from "esbuild";
 import chalk from "chalk";
 
 (async _ => {
+  const root = __dirname.replace(/\/wrangler$/, "");
+  fileSystem.mkdirSync(`${root}/dist/omelette/`, { recursive: true });
+
   await esbuild.build({
     platform: "browser",
     conditions: ["worker"],
@@ -11,8 +14,8 @@ import chalk from "chalk";
     bundle: true,
     minify: true,
     
-    entryPoints: [`${__dirname}/worker/index.ts`],
-    outfile: `${__dirname}/worker.mjs`,
+    entryPoints: [`${root}/wrangler/worker/index.ts`],
+    outfile: `${root}/dist/omelette/worker.mjs`,
     allowOverwrite: true,
   
     // `vite-plugin-ssr` uses some Node.js APIs that must be polyfilled
@@ -27,6 +30,6 @@ import chalk from "chalk";
     external: ["__STATIC_CONTENT_MANIFEST"]
   });
   
-  const stat = fileSystem.statSync(`${__dirname}/worker.mjs`);
+  const stat = fileSystem.statSync(`${root}/dist/omelette/worker.mjs`);
   console.log(`${chalk.blue('BUILD')} worker.mjs ${stat.size / 1000} KB`);
 })();

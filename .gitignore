@@ -4,7 +4,3 @@ dist/
 
 # Platform clutter.
 .DS_Store
-
-# Build artifacts.
-_manifest.ts
-worker.mjs

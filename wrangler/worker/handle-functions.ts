@@ -1,5 +1,7 @@
 import { getParsedResource } from "./helpers";
-import manifest from "./_manifest"; // @ts-ignore
+
+// @ts-ignore: Might not exist; built by `build-manifest.ts`.
+import manifest from "../../dist/omelette/manifest";
 
 type Query = { [key: string]: string };
 type Result = { contentType: string, body: string | ReadableStream };

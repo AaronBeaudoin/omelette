@@ -4,6 +4,8 @@ import chalk from "chalk";
 
 (async _ => {
   const root = __dirname.replace(/\/wrangler$/, "");
+  fileSystem.mkdirSync(`${root}/dist/omelette/`, { recursive: true });
+
   const functionGlob = `${root}/functions/**/*.func.{ts,js}`;
   const functionManifest: { [key: string]: string } = {};
   
@@ -29,7 +31,6 @@ import chalk from "chalk";
   Object.keys(functionManifest).every(generateFunctionManifestEntry);
   functionModuleText += " };";
 
-  const functionModulePath = `${__dirname}/worker/_manifest.ts`;
-  fileSystem.writeFileSync(functionModulePath, functionModuleText);
-  console.log(`${chalk.blue('BUILD')} _manifest.ts`);
+  fileSystem.writeFileSync(`${root}/dist/omelette/manifest.ts`, functionModuleText);
+  console.log(`${chalk.blue('BUILD')} functions.ts`);
 })();

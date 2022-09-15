@@ -1,5 +1,5 @@
 name = "omelette"
-main = "wrangler/worker.mjs"
+main = "dist/omelette/worker.mjs"
 compatibility_date = "2022-05-03"
 
 [site]

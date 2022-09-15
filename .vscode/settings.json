@@ -4,10 +4,7 @@
     ".github/": true,
     ".gitignore": true,
     "node_modules/": true,
-    "package-lock.json": true,
-    "wrangler/worker/_manifest.ts": true,
-    "wrangler/worker.mjs": true,
-    "dist/": true
+    "package-lock.json": true
   },
   "markdown.styles": [
     ".vscode/markdown.css"
