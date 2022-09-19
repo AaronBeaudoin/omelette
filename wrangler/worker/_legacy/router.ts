@@ -1,4 +1,4 @@
-// This file is inspired by the genius `itty-router`.
+// This router design mimics `itty-router`.
 // https://github.com/kwhitley/itty-router.
 
 type OmeletteRequest = Request & {

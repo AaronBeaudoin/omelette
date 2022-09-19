@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "^0.2.0",
+    "itty-router": "^2.6.1",
     "vite-plugin-ssr": "^0.4.31",
     "vue": "^3.2.39"
   },

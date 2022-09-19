@@ -1,14 +1,9 @@
 import { renderPage } from "vite-plugin-ssr";
-import { getParsedResource } from "./helpers";
 
-export async function handlePageRoute(
-  resource: ReturnType<typeof getParsedResource>,
-  env: Environment,
-  context: ExecutionContext
-) {
-  const initialPageContext = { urlOriginal: resource.request.url };
+export async function handler(request: Request) {
+  const initialPageContext = { urlOriginal: request.url };
   const pageContext = await renderPage(initialPageContext);
-  if (!pageContext.httpResponse) return null;
+  if (!pageContext.httpResponse) return undefined;
 
   const { readable, writable } = new TransformStream();
   pageContext.httpResponse.pipe(writable);

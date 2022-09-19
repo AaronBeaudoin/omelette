@@ -1,33 +1,92 @@
 {
-  "compilerOptions": {
+  // THE DEFAULT VALUE HAS `node_modules` LISTED, SO THIS MIGHT NOT BE NECESSARY.
+  // I'M NOT SURE FOR WHAT PURPOSE FILES ARE BEING INCLUDED WHEN THEY ARE NOT LISTED HERE.
+  // TAKE ANOTHER LOOK AT THE VPS EXAMPLES `tsconfig.json` TO SEE WHAT THEY DO.
+  // "exclude": [
+  //   "node_modules",
+  //   "dist"
+  // ],
 
+  // "These options make up the bulk of TypeScript’s
+  // config and cover how the language should work."
+  // https://www.typescriptlang.org/tsconfig#compilerOptions
+  "compilerOptions": {
+    
+    // This option sets which version of JavaScript to compile down to.
+    // Browser support is very good for a lot of features, even through
+    // ES2021, but to be safe I like to trail behind a few years to account
+    // for people not keeping their browsers up-to-date like they should.
+    // https://kangax.github.io/compat-table/es2016plus
+    // https://www.typescriptlang.org/tsconfig#target
+    "target": "ES2017",
+
+    // The default set of type declarations files to use.
+    // https://www.typescriptlang.org/tsconfig#lib
+    "lib": ["DOM", "ESNext"],
+
+    // Must be set for `volar` VS Code extension to work properly.
+    // https://github.com/johnsoncodehk/volar/issues/1153
+    // https://www.typescriptlang.org/tsconfig#jsx
+    "jsx": "preserve",
+
+    // The module system to compile to. ES2020 module system features
+    // have been supported in all major browsers since early 2020.
+    // https://www.typescriptlang.org/tsconfig#module
+    "module": "ES2020",
+
+    // It seems this should be the default for the above `module` value
+    // based on the documentation, but it looks like for some reason
+    // TypeScript still needs us to set it manually in this project.
+    // https://www.typescriptlang.org/tsconfig#moduleResolution
+    "moduleResolution": "node",
+
+    // Must be set to allow non-relative paths in the `paths` options.
+    // https://www.typescriptlang.org/tsconfig#baseUrl
+    "baseUrl": ".",
+
+    // Must be set to allow resolution of Vite imports starting
+    // with `/`, which starts from the the root of the project.
+    // https://www.typescriptlang.org/tsconfig#paths
+    "paths": { "/*": ["*"] },
+
+    // FIGURE OUT WHAT THE DIFFERENCE IS BETWEEN THIS AND DOING
+    // A COMMENT LIKE I CURRENTLY HAVE IN `index.d.ts`.
+    // WHY ARE `d.ts` FILES SO CONFUSING???
+    // LOOKS LIKE THIS OPTIONS CAN BE ELIMINATED BY DOING
+    // THE TRIPLE SLASH COMMENT IN `d.ts`. IT IS NOT
+    // NECESSARY TO DO BOTH, SO I CAN REMOVE THIS ONCE
+    // I CONFIRM THAT I CAN GET THE CLOUDFLARE WORKER
+    // TYPES WORKING VIA A TRIPLE SLASH REFERENCE
+    "types": [
+      "@cloudflare/workers-types"
+    ],
+    
     // Must be set to `true` due to `esbuild` limitations.
     // https://vitejs.dev/guide/features.html#isolatedmodules
+    // https://esbuild.github.io/content-types/#isolated-modules
     "isolatedModules": true,
 
-    "strict": true,
-    "module": "ES2020",
-    "moduleResolution": "node",
-    "target": "ES2017",
-    "lib": ["DOM", "ESNext"],
-    "skipLibCheck": true,
+    // For some reason, this option is `false` by default, but the
+    // better general recommendation is to set it to `true`.
+    // https://stackoverflow.com/questions/56238356
     "esModuleInterop": true,
-    "jsx": "preserve",
-    "baseUrl": ".",
-    "paths": { "/*": ["*"] },
-    "types": [
-      "vite/client",
-      "@cloudflare/workers-types"
-    ]
+
+    // This option "enables a wide range of type checking behavior
+    // that results in stronger guarantees of program correctness."
+    // https://www.typescriptlang.org/tsconfig#strict
+    "strict": true,
+
+    // Required to suppress errors from Vue due to incompatibility
+    // with `isolatedModules` that has been around for 2 years.
+    // https://github.com/vuejs/core/issues/1228
+    "skipLibCheck": true
   },
+
+  // TAKE A LOOK AT THE VPS CONFIG FOR THIS AND PROPERLY DESCRIBE THE OPTIONS
   "ts-node": {
     "transpileOnly": true,
     "compilerOptions": {
       "module": "CommonJS"
     }
-  },
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  }
 }
