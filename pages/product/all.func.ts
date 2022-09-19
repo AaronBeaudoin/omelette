@@ -1,15 +1,11 @@
 export default {
-  async get(query: Query, fetch: Fetch) {
-    return {
-      contentType: "application/json",
-      body: JSON.stringify(await Promise.all([
-        "Product A",
-        "Product B",
-        "Product C"
-      ].map(async name => {
-        let response = await fetch(`/fn/test/get?name=${name}`, { preview: true });
-        return await response.json();
-      })))
-    };
+  async GET(request: WorkerRequest) {
+    return new Response(JSON.stringify(await Promise.all(["A", "B", "C"].map(async name => {
+      let response = await request.fetch(`/product/${name}`, { preview: true });
+      return await response.json();
+    }))), {
+      headers: { "Content-Type": "application/json" },
+      status: 200
+    });
   }
 };

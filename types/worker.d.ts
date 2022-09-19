@@ -40,6 +40,8 @@ interface FunctionConfig {
   handler: Function,
   cache?: {
     key: string,
-    ttl?: number
+    ttl?: number,
+    preview: boolean,
+    refresh: boolean
   }
 }

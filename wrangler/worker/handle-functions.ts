@@ -1,5 +1,6 @@
 // @ts-ignore: Might not exist; built by `build-manifest.ts`.
 import functions from "../../dist/omelette/functions";
+import { extendRequest } from "./helpers";
 
 function getCacheConfig(
   request: WorkerRequest,
@@ -7,7 +8,6 @@ function getCacheConfig(
   cache?: number | true
 ) {
   if (!cache) return;
-
   const search = new URLSearchParams(request.query);
   const searchString = search.sort() as unknown as false || search.toString();
   const preview = request.query.preview ? request.query.preview === env.SECRET : false;
@@ -27,8 +27,29 @@ async function handleFunction(
   context: WorkerContext,
   config: FunctionConfig
 ) {
-  console.log("FUNCTION", request.path);
-  return new Response("FUNCTION", { status: 200 });
+  // 1. Handle refresh if applicable.
+  if (request.method === "POST" && config.cache && config.cache.refresh) {
+    // WIP
+  }
+
+  // 2. Get from cache if applicable.
+  if (request.method === "GET" && config.cache && !config.cache.preview) {
+    // WIP
+  }
+
+  // 3. Run function handler.
+  const response = await config.handler(request);
+
+  // 4. Tee response body into two streams.
+  // WIP
+
+  // 5. Cache response if applicable.
+  if (request.method === "GET" && config.cache && !config.cache.preview) {
+    // WIP
+  }
+
+  // 6. Return response.
+  return response;
 }
 
 export async function handler(
@@ -50,5 +71,17 @@ export async function handler(
       handler: methods[request.method],
       cache: getCacheConfig(request, env, cache)
     });
+  }
+};
+
+export default {
+  async fetch(
+    request: WorkerRequest,
+    env: WorkerEnvironment,
+    context: WorkerContext
+  ) {
+    extendRequest(request, env, context, handler);
+    const response = await handler(request, env, context);
+    return response || new Response(null, { status: 404 });
   }
 };
