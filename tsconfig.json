@@ -1,12 +1,4 @@
 {
-  // THE DEFAULT VALUE HAS `node_modules` LISTED, SO THIS MIGHT NOT BE NECESSARY.
-  // I'M NOT SURE FOR WHAT PURPOSE FILES ARE BEING INCLUDED WHEN THEY ARE NOT LISTED HERE.
-  // TAKE ANOTHER LOOK AT THE VPS EXAMPLES `tsconfig.json` TO SEE WHAT THEY DO.
-  // "exclude": [
-  //   "node_modules",
-  //   "dist"
-  // ],
-
   // "These options make up the bulk of TypeScript’s
   // config and cover how the language should work."
   // https://www.typescriptlang.org/tsconfig#compilerOptions
@@ -48,18 +40,6 @@
     // with `/`, which starts from the the root of the project.
     // https://www.typescriptlang.org/tsconfig#paths
     "paths": { "/*": ["*"] },
-
-    // FIGURE OUT WHAT THE DIFFERENCE IS BETWEEN THIS AND DOING
-    // A COMMENT LIKE I CURRENTLY HAVE IN `index.d.ts`.
-    // WHY ARE `d.ts` FILES SO CONFUSING???
-    // LOOKS LIKE THIS OPTIONS CAN BE ELIMINATED BY DOING
-    // THE TRIPLE SLASH COMMENT IN `d.ts`. IT IS NOT
-    // NECESSARY TO DO BOTH, SO I CAN REMOVE THIS ONCE
-    // I CONFIRM THAT I CAN GET THE CLOUDFLARE WORKER
-    // TYPES WORKING VIA A TRIPLE SLASH REFERENCE
-    "types": [
-      "@cloudflare/workers-types"
-    ],
     
     // Must be set to `true` due to `esbuild` limitations.
     // https://vitejs.dev/guide/features.html#isolatedmodules
@@ -82,11 +62,17 @@
     "skipLibCheck": true
   },
 
-  // TAKE A LOOK AT THE VPS CONFIG FOR THIS AND PROPERLY DESCRIBE THE OPTIONS
+  // Options for `ts-node`, the TypeScript execution engine.
+  // (Run TypeScript files directly from the command-line.)
+  // https://unpkg.com/browse/ts-node/tsconfig.schema.json
+  // https://www.npmjs.com/package/ts-node
   "ts-node": {
+
+    // Skip type checking, since your IDE should
+    // have already helped you with that concern.
     "transpileOnly": true,
-    "compilerOptions": {
-      "module": "CommonJS"
-    }
+
+    // Override some `compilerOptions` above.
+    "compilerOptions": { "module": "CommonJS" }
   }
 }

@@ -1,9 +1,9 @@
 import { renderPage } from "vite-plugin-ssr";
 
-export async function handler(request: Request) {
+export async function handler(request: WorkerRequest) {
   const initialPageContext = { urlOriginal: request.url };
   const pageContext = await renderPage(initialPageContext);
-  if (!pageContext.httpResponse) return undefined;
+  if (!pageContext.httpResponse) return new Response(null, { status: 200 });
 
   const { readable, writable } = new TransformStream();
   pageContext.httpResponse.pipe(writable);

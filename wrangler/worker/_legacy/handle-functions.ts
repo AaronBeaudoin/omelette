@@ -16,7 +16,7 @@ function getFunctionConfig(path: string) {
   };
 }
 
-function getFunctionQuery(query: Query, env: Environment) {
+function getFunctionQuery(query: Query, env: WorkerEnvironment) {
   const preview = query.preview ? query.preview === env.SECRET : false;
   const refresh = query.refresh ? query.refresh === env.SECRET : false;
 
@@ -56,7 +56,7 @@ function getFunctionHandler(
   };
 }
 
-async function getResultStreams(result: Result, env: Environment) {
+async function getResultStreams(result: Result, env: WorkerEnvironment) {
   if (typeof result.body === "string") return (_ => [_, _])(result.body);
 
   let streams = result.body.tee();
@@ -72,7 +72,7 @@ function getStoreKey(path: string, query: Query) {
 }
 
 function setStoreValue(
-  env: Environment,
+  env: WorkerEnvironment,
   key: string,
   data: string | ReadableStream | ArrayBuffer,
   contentType: string,
@@ -84,7 +84,7 @@ function setStoreValue(
   });
 }
 
-async function getStoreValue(env: Environment, key: string) {
+async function getStoreValue(env: WorkerEnvironment, key: string) {
   const result = await env.FUNCTIONS.getWithMetadata<any>(key, { type: "stream" });
   if (!result.value || !result.metadata?.contentType) return;
 
@@ -96,7 +96,7 @@ async function getStoreValue(env: Environment, key: string) {
 
 export async function handleFunctionRoute(
   resource: ReturnType<typeof getParsedResource>,
-  env: Environment,
+  env: WorkerEnvironment,
   context: ExecutionContext
 ) {
 
@@ -162,7 +162,7 @@ export async function handleFunctionRoute(
   });
 }
 
-async function handleRequest(request: Request, env: Environment, context: ExecutionContext) {
+async function handleRequest(request: Request, env: WorkerEnvironment, context: ExecutionContext) {
   const resource = getParsedResource(request, env, context, handleRequest);
   let response = await handleFunctionRoute(resource, env, context);
   return response || new Response("FUNCTION_ROUTE", { status: 500 });
