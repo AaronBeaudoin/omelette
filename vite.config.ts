@@ -2,6 +2,8 @@ import pathTools from "path";
 import glob from "glob";
 import fetch from "node-fetch";
 import { defineConfig } from "vite";
+import { renderPage } from "vite-plugin-ssr";
+import { transformerVariantGroup } from "unocss";
 import VitePluginAutoImport from "unplugin-auto-import/vite";
 import VitePluginIcons from "unplugin-icons/vite";
 import VitePluginUnoCSS from "unocss/vite";
@@ -11,7 +13,6 @@ import VitePluginSVG from "vite-svg-loader";
 import VitePluginVueComponents from "unplugin-vue-components/vite";
 import VitePluginSSR from "vite-plugin-ssr/plugin";
 import IconResolver from "unplugin-icons/resolver";
-import { transformerVariantGroup } from "unocss";
 
 export default defineConfig({
   server: {
@@ -154,8 +155,8 @@ export default defineConfig({
 
 
     // The `dev-function-proxy` plugin forwards requests to `wrangler` during development.
-    // Header `X-Function-Proxy: MISS` means thats the worker function returned `undefined`.
-    // With this implementation, functions take precedence over pages like in production.
+    // `X-Function-Proxy: MISS` means that `response` in the worker handler was `undefined`.
+    // With this plugin order, functions take precedence over pages like in production.
     {
       name: "dev-function-proxy",
       configureServer(server) {
@@ -174,6 +175,35 @@ export default defineConfig({
             workerResponse.headers.forEach((value, key) => response.setHeader(key, value));
             response.writeHead(workerResponse.status);
             response.end(await workerResponse.buffer());
+          });
+        };
+      }
+    },
+
+
+    // The `dev-render-page` plugin runs before `vite-plugin-ssr`, overriding the built-in
+    // middleware for rendering page routes. The purpose of this is to allow custom data to
+    // be supplied to `initialPageContext` without needing to create an entire Express server.
+    {
+      name: "dev-render-page",
+      configureServer(server) {
+        return () => {
+          server.middlewares.use(async (request, response, next) => {
+            if (response.headersSent) return next();
+            if (!(request.originalUrl || request.url)) return next();
+            
+            const initialPageContext = {
+              urlOriginal: request.originalUrl || request.url,
+              userAgent: request.headers["user-agent"],
+              test: "WOWZERS"
+            };
+
+            const pageContext = await renderPage(initialPageContext);
+            if (!pageContext.httpResponse) return next();
+
+            response.setHeader("Content-Type", pageContext.httpResponse.contentType);
+            response.writeHead(pageContext.httpResponse.statusCode);
+            pageContext.httpResponse.pipe(response);
           });
         };
       }

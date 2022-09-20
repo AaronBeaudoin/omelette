@@ -1,6 +1,14 @@
 <script lang="ts">
 export const title = "Home";
 export default {};
+
+</script>
+
+<script setup lang="ts">
+import { inject } from "vue";
+
+const pageContext = inject("pageContext");
+console.log(pageContext);
 </script>
 
 <template>

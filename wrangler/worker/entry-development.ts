@@ -22,7 +22,7 @@ async function handler(
 
   return new Response(null, {
     headers: { "X-Function-Proxy": "MISS" },
-    status: 404
+    status: 204
   });
 }
 

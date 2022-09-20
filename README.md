@@ -137,6 +137,15 @@ This section is a _work in progress_.
 
 <!--
 
+## TODOS
+
+- Work on adding global custom data from `initialPageContext` to `provide` with Vue. The data should be similar to what is added to `request` in the worker and replace the need for a global `pageContext`.
+- Work on setting up `viewport.js`. Make a custom `root` or `base` or whatever layout that can be used in other layouts to provide a shell compatible with `viewport.js`. Also rework the script to be minimal and specially for Omelette.
+
+
+
+
+
 ## The Story
 
 I'm someone who likes to be on the cutting edge, so when I started learning web development I went _all in_ on the [Jamstack](https://jamstack.org). I had battled with WordPress, so I was ready for the "future" of web development. I deployment a website for my job using a full-static architecture with [Nuxt.js](https://nuxtjs.org) on [Firebase](https://firebase.google.com). It was overall quite a success, but I also learned a lot about the drawbacks of the typical Jamstack architecture as well.

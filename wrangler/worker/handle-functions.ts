@@ -14,11 +14,12 @@ function getCacheConfig(
   if (!cache) return;
   const search = new URLSearchParams(request.query);
   const searchString = search.sort() as unknown as false || search.toString();
+  const searchSeparator = searchString.length ? "?" + searchString : "";
   const preview = request.query.preview ? request.query.preview === env.SECRET : false;
   const refresh = request.query.refresh ? request.query.refresh === env.SECRET : false;
 
   return {
-    key: request.path + searchString.length ? "?" + searchString : "",
+    key: request.path + searchSeparator + searchString,
     ttl: typeof cache === "number" && cache >= 60 ? cache : undefined,
     preview: preview || ("DEV" in env && "preview" in request.query),
     refresh: refresh || ("DEV" in env && "refresh" in request.query)
