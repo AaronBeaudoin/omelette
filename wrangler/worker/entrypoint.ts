@@ -16,8 +16,7 @@ async function handler(
   };
 
   extendRequest(request, env, context, handler);
-  try { return await dispatch(assets, functions, pages); }
-  catch (error) { console.log(error); }
+  return await dispatch(assets, functions, pages);
 }
 
 export default {
