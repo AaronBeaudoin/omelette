@@ -14,7 +14,7 @@ import chalk from "chalk";
     bundle: true,
     minify: true,
     
-    entryPoints: [`${root}/wrangler/worker/entrypoint.ts`],
+    entryPoints: [`${root}/wrangler/worker/entry-production.ts`],
     outfile: `${root}/dist/omelette/worker.mjs`,
     allowOverwrite: true,
   

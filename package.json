@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "dev:vite": "vite",
-    "dev:wrangler": "wrangler dev wrangler/worker/proxy --local --port 8787 --var DEV",
+    "dev:wrangler": "wrangler dev wrangler/worker/entry-development --local --port 8787 --var DEV",
     "dev:manifest": "chokidar pages -i dist/omelette/functions.ts -c \"npm run build:manifest\"",
     "dev": "npm run build:manifest && concurrently npm:dev:*",
     "build:vite": "vite build",

@@ -10,11 +10,9 @@ async function handler(
   const response = await functions(request, env, context);
 
   if (response) {
-    const headers = {
-      ...response.headers,
-      "X-Function-Proxy": "HIT",
-      "Cache-Control": "no-cache"
-    };
+    const headers = new Headers(response.headers);
+    headers.set("X-Function-Proxy", "HIT");
+    headers.set("Cache-Control", "no-cache");
 
     return new Response(response.body, {
       headers: headers,
