@@ -1,5 +1,6 @@
 import pathTools from "path";
 import glob from "glob";
+import fetch from "node-fetch";
 import { defineConfig } from "vite";
 import VitePluginAutoImport from "unplugin-auto-import/vite";
 import VitePluginIcons from "unplugin-icons/vite";
@@ -22,10 +23,7 @@ export default defineConfig({
 
     // Vite now uses port 5173 to avoid collisions with other tools.
     // What a weird number to try and remember. We'll stick with 3000.
-    port: 3000,
-
-    // Calls to functions are handled by `wrangler dev` at port 8787.
-    proxy: { "/fn": "http://localhost:8787" }
+    port: 3000
   },
   plugins: [
 
@@ -153,6 +151,32 @@ export default defineConfig({
       // Auto import in both `.vue` files and `.md` files.
       include: [/\.vue$/, /\.md$/]
     }),
+
+
+    // The `dev-function-proxy` plugin forwards requests to `wrangler` during development.
+    // If the worker response has `X-Function-Proxy` then the function returned nothing.
+    {
+      name: "dev-function-proxy",
+      configureServer(server) {
+        return () => {
+          server.middlewares.use(async (request, response, next) => {
+            const fetchHeaders: [string, string][] = request.rawHeaders.reduce((result, _, index, raw) => {
+              if (!(index % 2)) return result;
+              const pair = raw.slice(index-1, index+1);
+              return result.concat([pair as never]);
+            }, []);
+
+            const fetchConfig = { method: request.method, headers: fetchHeaders };
+            const workerResponse = await fetch("http://localhost:8787" + request.url, fetchConfig);
+            if (workerResponse.headers.get("X-Function-Proxy")) return next();
+
+            workerResponse.headers.forEach((value, key) => response.setHeader(key, value));
+            response.writeHead(workerResponse.status);
+            response.end(await workerResponse.buffer());
+          });
+        };
+      }
+    },
 
 
     // The `vite-plugin-ssr` plugin enables SSR.

@@ -1,6 +1,5 @@
 // @ts-ignore: Might not exist; built by `build-manifest.ts`.
 import functions from "../../dist/omelette/functions";
-import { extendRequest } from "./helpers";
 
 function getCacheConfig(
   request: WorkerRequest,
@@ -59,10 +58,10 @@ export async function handler(
 ) {
   const routes = functions as FunctionRoute[];
   for (let route of routes) {
-    
+
     const { cache, ...methods } = route.module;
     if (!(request.method in methods)) continue;
-    
+
     const result = request.path.match(route.expression);
     if (!result) continue;
 
@@ -71,17 +70,5 @@ export async function handler(
       handler: methods[request.method],
       cache: getCacheConfig(request, env, cache)
     });
-  }
-};
-
-export default {
-  async fetch(
-    request: WorkerRequest,
-    env: WorkerEnvironment,
-    context: WorkerContext
-  ) {
-    extendRequest(request, env, context, handler);
-    const response = await handler(request, env, context);
-    return response || new Response(null, { status: 404 });
   }
 };
