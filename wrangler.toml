@@ -10,6 +10,6 @@ ip = "0.0.0.0"
 port = 3000
 
 [[kv_namespaces]]
-id = "501133c6aac0469fa0d0b603d7948bd1"
+id = "8b6290912a464a89a0fcdfcf0f31e257"
 preview_id = "c6720ef5223a41a2bdd78ed8def6b48f"
 binding = "FUNCTIONS"
