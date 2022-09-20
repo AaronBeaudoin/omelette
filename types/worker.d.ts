@@ -1,11 +1,16 @@
 /// <reference types="@cloudflare/workers-types"/>
 
+interface RequestInit {
+  preview?: true,
+  refresh?: true
+}
+
 interface WorkerRequest extends Request {
   origin: string;
   path: string;
   params: { [key: string]: string };
   query: { [key: string]: string };
-  fetch: Fetch;
+  fetch: typeof fetch;
 }
 
 interface WorkerEnvironment {

@@ -4,14 +4,16 @@ function getExtendedFetch(
   context: WorkerContext,
   handler: Function
 ) {
-  return async (input: string | Request, options: FetchInit = {}) => {
+  return async (input: string | URL | Request, options?: RequestInit) => {
+    if (!options) options = {};
+
     if (typeof input !== "string") return await fetch(input, options);
     if (!input.startsWith("/")) return await fetch(input, options);
 
     let requestUrl = new URL(request.origin + input);
     if (options.preview) requestUrl.searchParams.append("preview", env.SECRET || "");
     if (options.refresh) requestUrl.searchParams.append("refresh", env.SECRET || "");
-    return await handler(new Request(requestUrl, options) as WorkerRequest, env, context);
+    return await handler(new Request(requestUrl, options), env, context) as Response;
   };
 }
 

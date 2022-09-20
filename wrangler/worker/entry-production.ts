@@ -8,15 +8,13 @@ async function handler(
   env: WorkerEnvironment,
   context: WorkerContext
 ) {
-  const dispatch = async (...handlers: Function[]) => {
-    for (let handler of handlers) {
-      const response = await handler(request, env, context);
-      if (response) return response;
-    }
-  };
-
   extendRequest(request, env, context, handler);
-  return await dispatch(assets, functions, pages);
+  const handlers = [assets, functions, pages];
+
+  for (let handler of handlers) {
+    const response = await handler(request, env, context);
+    if (response) return response;
+  }
 }
 
 export default {
