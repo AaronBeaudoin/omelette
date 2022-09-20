@@ -37,7 +37,8 @@ async function handleFunction(
   }
 
   // 3. Run function handler.
-  const response = await config.handler(request);
+  const response: Response | undefined = await config.handler(request);
+  if (!response) return;
 
   // 4. Tee response body into two streams.
   // WIP
@@ -48,7 +49,10 @@ async function handleFunction(
   }
 
   // 6. Return response.
-  return response;
+  return new Response(response.body, {
+    headers: { ...response.headers, "Cache-Control": "no-cache" },
+    status: response.status
+  });
 }
 
 export async function handler(

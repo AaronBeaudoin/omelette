@@ -154,7 +154,8 @@ export default defineConfig({
 
 
     // The `dev-function-proxy` plugin forwards requests to `wrangler` during development.
-    // If the worker response has `X-Function-Proxy` then the function returned nothing.
+    // Header `X-Function-Proxy: MISS` means thats the worker function returned `undefined`.
+    // With this implementation, functions take precedence over pages like in production.
     {
       name: "dev-function-proxy",
       configureServer(server) {
@@ -168,7 +169,7 @@ export default defineConfig({
 
             const fetchConfig = { method: request.method, headers: fetchHeaders };
             const workerResponse = await fetch("http://localhost:8787" + request.url, fetchConfig);
-            if (workerResponse.headers.get("X-Function-Proxy")) return next();
+            if (workerResponse.headers.get("X-Function-Proxy") === "MISS") return next();
 
             workerResponse.headers.forEach((value, key) => response.setHeader(key, value));
             response.writeHead(workerResponse.status);

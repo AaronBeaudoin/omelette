@@ -8,7 +8,21 @@ async function handler(
 ) {
   extendRequest(request, env, context, handler);
   const response = await functions(request, env, context);
-  return response || new Response(null, {
+
+  if (response) {
+    const headers = {
+      ...response.headers,
+      "X-Function-Proxy": "HIT",
+      "Cache-Control": "no-cache"
+    };
+
+    return new Response(response.body, {
+      headers: headers,
+      status: response.status
+    });
+  }
+
+  return new Response(null, {
     headers: { "X-Function-Proxy": "MISS" },
     status: 404
   });
