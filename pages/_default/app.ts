@@ -34,6 +34,7 @@ export async function createPageApp(pageContext: PageContext) {
   const PageComponent = await wrapPageComponent(LayoutComponent, pageContext.Page, pageContext.pageProps);
   const page = (pageContext.exports.mode === "client-only" ? createApp : createSSRApp)(PageComponent);
 
-  page.provide("pageContext", pageContext);
+  page.provide("route", { path: pageContext.urlParsed.pathname, query: pageContext.urlParsed.search });
+  page.provide("fetch", import.meta.env.SSR ? pageContext.fetch : window.fetch);
   return page;
 }

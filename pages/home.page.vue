@@ -1,18 +1,22 @@
 <script lang="ts">
 export const title = "Home";
-export default {};
-
+export const fetch = async (route: WorkerRoute, fetch: WorkerFetch, props: Record<string, unknown>) => {
+  props.test = await (await fetch("/product/A")).json();
+};
 </script>
 
 <script setup lang="ts">
-import { inject } from "vue";
-
-const pageContext = inject("pageContext");
-console.log(pageContext);
+defineProps({
+  test: {
+    type: String,
+    required: true
+  }
+});
 </script>
 
 <template>
   <h1 class="mb-4 text-2xl font-bold">Examples</h1>
+  <div>Prop: {{ test }}</div>
   <div class="[&>*]:block [&>*]:underline">
     <a class="text-red-700" href="/examples/alternate">Page With Alternate Layout</a>
     <a class="text-orange-700" href="/examples/markdown">Page With Markdown File</a>

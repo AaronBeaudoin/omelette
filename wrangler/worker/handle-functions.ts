@@ -93,17 +93,16 @@ async function handleFunction(
   // 3. Run function handler.
   const response = await config.handler(request);
   if (!response) return;
+  let body = response.body;
 
-  // 4. Tee response body into two stream.
-  let streams = response.body ? response.body.tee() : ["", ""];
-  
   // 5. Cache response if applicable.
   if (request.method === "GET" && config.cache && !config.cache.preview) {
+    const streams = response.body ? response.body.tee() : [null, null];
+    body = streams[1];
 
     // https://github.com/cloudflare/miniflare/issues/375
-    const body = "DEV" in env ? await new Response(streams[0]).arrayBuffer() : streams[0];
-
-    const promise = cacheResponse(env, config, response, body);
+    const cached = "DEV" in env ? await new Response(streams[0]).arrayBuffer() : streams[0];
+    const promise = cacheResponse(env, config, response, cached || "");
     context.waitUntil(promise);
   }
   
@@ -114,7 +113,7 @@ async function handleFunction(
   headers.set("Cache-Control", "no-cache");
 
   // 7. Return response.
-  return new Response(streams[1], {
+  return new Response(body, {
     headers: headers,
     status: response.status
   });

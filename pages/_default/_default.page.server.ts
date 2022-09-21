@@ -26,6 +26,16 @@ function pipeToWritable(page: any) {
   return pipe as (writable: WritableStream) => void;
 }
 
+export async function onBeforeRender(pageContext: PageContext) {
+  let pageProps = {};
+
+  const fetch = pageContext.exports.fetch as Function | undefined;
+  const route = { path: pageContext.urlParsed.pathname, query: pageContext.urlParsed.search };
+
+  if (fetch) await fetch(route, pageContext.fetch, pageProps);
+  return { pageContext: { pageProps: pageProps } };
+}
+
 export async function render(pageContext: PageContext) {
   const title = pageContext.exports.title ? pageContext.exports.title + " — " : "";
 

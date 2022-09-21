@@ -190,12 +190,21 @@ export default defineConfig({
         return () => {
           server.middlewares.use(async (request, response, next) => {
             if (response.headersSent) return next();
-            if (!(request.originalUrl || request.url)) return next();
-            
+            if (!request.originalUrl && !request.url) return next();
+
             const initialPageContext = {
               urlOriginal: request.originalUrl || request.url,
-              userAgent: request.headers["user-agent"],
-              test: "WOWZERS"
+              fetch: async (input: any, options?: any) => {
+                if (!options) options = {};
+
+                if (typeof input !== "string") return await fetch(input, options);
+                if (!input.startsWith("/")) return await fetch(input, options);
+
+                let requestUrl = new URL("http://" + request.headers["host"] + input);
+                if (options.preview) requestUrl.searchParams.append("preview", "");
+                if (options.refresh) requestUrl.searchParams.append("refresh", "");
+                return await fetch(requestUrl, options);
+              }
             };
 
             const pageContext = await renderPage(initialPageContext);
