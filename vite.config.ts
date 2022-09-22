@@ -36,8 +36,7 @@ export default defineConfig({
       // automatically available across our entire project.
       imports: [
         {
-          "vue": ["ref"],
-          "vue/macros": ["$ref"]
+          "vue": ["ref"]
         }
       ],
 
