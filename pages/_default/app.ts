@@ -20,10 +20,10 @@ export async function getLayoutComponent(name?: string) {
 export async function wrapPageComponent(
   LayoutComponent: ComponentOptions,
   PageComponent: ComponentOptions,
-  props = {}
+  props: Record<string, any>
 ) {
-  const renderLayout = () => h(LayoutComponent, props || {}, { default: renderLayoutDefaultSlot });
-  const renderLayoutDefaultSlot = () => h(PageComponent, props || {});
+  const renderLayout = () => h(LayoutComponent, props, { default: renderLayoutDefaultSlot });
+  const renderLayoutDefaultSlot = () => h(PageComponent, props);
   return { render: renderLayout };
 }
 
@@ -31,10 +31,10 @@ export async function createPageApp(pageContext: PageContext) {
   const layoutName = pageContext.exports.layout as (string | undefined);
   const LayoutComponent = await getLayoutComponent(layoutName);
 
-  const PageComponent = await wrapPageComponent(LayoutComponent, pageContext.Page, pageContext.pageProps);
+  const PageComponent = await wrapPageComponent(LayoutComponent, pageContext.Page, pageContext.props);
   const page = (pageContext.exports.mode === "client-only" ? createApp : createSSRApp)(PageComponent);
 
-  page.provide("route", { path: pageContext.urlParsed.pathname, query: pageContext.urlParsed.search });
+  page.provide("route", pageContext.route);
   page.provide("fetch", import.meta.env.SSR ? pageContext.fetch : window.fetch);
   return page;
 }

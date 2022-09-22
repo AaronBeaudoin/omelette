@@ -1,7 +1,9 @@
 <script lang="ts">
 export const title = "Home";
-export const fetchProps = async (props: WorkerProps, route: WorkerRoute, fetch: WorkerFetch) => {
-  props.test = await (await fetch("/product/A")).json();
+export const fetchProps = async (route: WorkerRoute, fetch: WorkerFetch) => {
+  return {
+    test: await (await fetch("/product/A")).json()
+  };
 };
 </script>
 
@@ -17,6 +19,7 @@ defineProps({
 <template>
   <h1 class="mb-4 text-2xl font-bold">Examples</h1>
   <div>Prop: {{ test }}</div>
+  <img src="/image" alt="test">
   <div class="[&>*]:block [&>*]:underline">
     <a class="text-red-700" href="/examples/alternate">Page With Alternate Layout</a>
     <a class="text-orange-700" href="/examples/markdown">Page With Markdown File</a>
