@@ -29,10 +29,10 @@ function pipeToWritable(page: any) {
 export async function onBeforeRender(pageContext: PageContext) {
   let pageProps = {};
 
-  const fetch = pageContext.exports.fetch as Function | undefined;
+  const fetchProps = pageContext.exports.fetchProps as Function | undefined;
   const route = { path: pageContext.urlParsed.pathname, query: pageContext.urlParsed.search };
 
-  if (fetch) await fetch(route, pageContext.fetch, pageProps);
+  if (fetchProps) await fetchProps(pageProps, route, pageContext.fetch);
   return { pageContext: { pageProps: pageProps } };
 }
 

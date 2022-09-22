@@ -181,9 +181,10 @@ export default defineConfig({
     },
 
 
-    // The `dev-render-page` plugin runs before `vite-plugin-ssr`, overriding the built-in
-    // middleware for rendering page routes. The purpose of this is to allow custom data to
-    // be supplied to `initialPageContext` without needing to create an entire Express server.
+    // The `dev-render-page` plugin runs before the built-in `vite-plugin-ssr` middleware
+    // for rendering page routes, overriding it by writing a response before the built-in
+    // middleware gets the chance. The purpose is to supply a custom `fetch` function to
+    // the page via `initialPageContext` without a custom Express server script.
     {
       name: "dev-render-page",
       configureServer(server) {

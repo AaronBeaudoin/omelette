@@ -1,6 +1,6 @@
 <script lang="ts">
 export const title = "Home";
-export const fetch = async (route: WorkerRoute, fetch: WorkerFetch, props: Record<string, unknown>) => {
+export const fetchProps = async (props: WorkerProps, route: WorkerRoute, fetch: WorkerFetch) => {
   props.test = await (await fetch("/product/A")).json();
 };
 </script>

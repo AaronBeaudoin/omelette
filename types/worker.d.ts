@@ -21,6 +21,7 @@ interface WorkerEnvironment {
 
 // Renamed for consistency and clarity.
 type WorkerContext = ExecutionContext;
+type WorkerProps = Record<string, any>;
 type WorkerRoute = { path: string, query: Record<string, string> };
 type WorkerFetch = typeof fetch;
 
