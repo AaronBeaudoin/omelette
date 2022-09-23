@@ -1,7 +1,7 @@
 <script lang="ts">
 export const title = "Home";
 export const props = async (route: WorkerRoute, fetch: WorkerFetch) => {
-  const response = await fetch("/test/data");
+  const response = await fetch("/test/_date");
   return { server: await response.text() };
 };
 </script>
@@ -20,7 +20,7 @@ let client: string | null = $ref(null);
 const fetch = inject("fetch") as WorkerFetch;
 
 const get = async () => {
-  const response = await fetch("/test/data");
+  const response = await fetch("/test/_date");
   client = await response.text();
 };
 </script>
