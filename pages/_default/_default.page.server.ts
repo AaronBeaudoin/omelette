@@ -16,9 +16,13 @@ export const passToClient = [
 ];
 
 export async function onBeforeRender(pageContext: PageContext) {
-  if (!pageContext.exports.props) return;
-
-  const route = { path: pageContext.urlParsed.pathname, query: pageContext.urlParsed.search };
+  const route = {
+    path: pageContext.urlParsed.pathname,
+    params: pageContext.routeParams,
+    query: pageContext.urlParsed.search
+  };
+  
+  if (!pageContext.exports.props) return { pageContext: { props: {}, route: route } };
   const props = await (pageContext.exports.props as Function)(route, pageContext.fetch);
   return { pageContext: { props: props || {}, route: route } };
 }
