@@ -1,4 +1,4 @@
-import { pipeToWebWritable, pipeToNodeWritable } from "vue/server-renderer";
+import { renderToString, pipeToWebWritable, pipeToNodeWritable } from "vue/server-renderer";
 import { escapeInject as escape, dangerouslySkipEscape as unescape, stampPipe } from "vite-plugin-ssr";
 import { getPageMode, createPageApp } from "./app";
 import { ServerPageModeHandler } from "./app";
@@ -27,6 +27,7 @@ export async function onBeforeRender(pageContext: PageContext) {
   return { pageContext: { props: props || {}, route: route } };
 }
 
+// Temporarily unused while I figure out how to use it with teleports.
 function pipeToWritable(page: any, pageContext: PageContext) {
   const implementations = {
     "web-stream": (writable: WritableStream) => { pipeToWebWritable(page, pageContext, writable); },
@@ -43,13 +44,15 @@ export async function render(pageContext: PageContext) {
   const title = pageContext.exports.title ? pageContext.exports.title + " — " : "";
 
   const modeHandlers: Record<string, ServerPageModeHandler> = {
-    "server-and-client": page => pipeToWritable(page, pageContext),
-    "server-only": page => pipeToWritable(page, pageContext),
-    "client-only": _ => ""
+    // "server-and-client": page => pipeToWritable(page, pageContext),
+    // "server-only": page => pipeToWritable(page, pageContext),
+    "server-and-client": async page => unescape(await renderToString(page, pageContext)),
+    "server-only": async page => unescape(await renderToString(page, pageContext)),
+    "client-only": _ => unescape("")
   };
 
   const page = await createPageApp(pageContext);
-  const pageHtml = modeHandlers[getPageMode(pageContext)](page);
+  const pageHtml = await modeHandlers[getPageMode(pageContext)](page);
   const teleport = (selector: string) => unescape(pageContext.teleports?.[selector] || "");
 
   return escape`
