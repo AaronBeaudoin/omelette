@@ -12,9 +12,14 @@ export function getPageMode(pageContext: PageContext) {
   return (modes.includes(mode) ? mode : modes[0]) as PageMode;
 }
 
-export async function getLayoutComponent(name?: string) {
-  try { return (await import(`../../layouts/${name || "default"}.layout.vue`)).default as ComponentOptions; }
-  catch { return defineComponent({ render() { return this.$slots.default && this.$slots.default(); } }); }
+export async function getLayoutComponent(name: string | null | undefined) {
+  const getComponent = async (_: string) => (await import(`../../layouts/${name}.layout.vue`)).default;
+  const Transparent = defineComponent({ render() { return (this.$slots.default as Function)(); } });
+  if (name === null) return Transparent;
+
+  if (name === undefined) name = "default";
+  try { return await getComponent(name) as ComponentOptions; }
+  catch { return Transparent; }
 }
 
 export async function wrapPageComponent(
@@ -28,7 +33,7 @@ export async function wrapPageComponent(
 }
 
 export async function createPageApp(pageContext: PageContext) {
-  const layoutName = pageContext.exports.layout as (string | undefined);
+  const layoutName = (pageContext.exports.layout as (string | null | undefined));
   const LayoutComponent = await getLayoutComponent(layoutName);
 
   const PageComponent = await wrapPageComponent(LayoutComponent, pageContext.Page, pageContext.props);
