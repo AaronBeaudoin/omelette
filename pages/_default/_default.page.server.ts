@@ -48,7 +48,7 @@ export async function render(pageContext: PageContext) {
     // "server-only": page => pipeToWritable(page, pageContext),
     "server-and-client": async page => unescape(await renderToString(page, pageContext)),
     "server-only": async page => unescape(await renderToString(page, pageContext)),
-    "client-only": _ => unescape("")
+    "client-only": _ => ""
   };
 
   const page = await createPageApp(pageContext);

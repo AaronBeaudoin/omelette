@@ -4,7 +4,7 @@ import { PageContext } from "./types";
 
 export type PageMode = "server-and-client" | "server-only" | "client-only";
 export type PagePipe = ((writable: WritableStream) => void);
-export type PageString = { "__escaped": string };
+export type PageString = string | { "__escaped": string };
 
 export type ServerPageModeHandler = (page: App<Element>) => PagePipe | PageString | Promise<PageString>;
 export type ClientPageModeHandler = (page: App<Element>) => Component | undefined;
