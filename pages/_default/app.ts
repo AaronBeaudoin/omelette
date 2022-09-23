@@ -17,7 +17,7 @@ export async function getLayoutComponent(name: string | null | undefined) {
   const Transparent = defineComponent({ render() { return (this.$slots.default as Function)(); } });
   if (name === null) return Transparent;
 
-  if (name === undefined) name = "default";
+  if (name === undefined) name = "_default";
   try { return await getComponent(name) as ComponentOptions; }
   catch { return Transparent; }
 }
