@@ -1,6 +1,6 @@
 <script lang="ts">
 export const title = "Home";
-export {};
+export default {};
 </script>
 
 <template>
