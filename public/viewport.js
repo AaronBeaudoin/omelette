@@ -130,4 +130,65 @@ function steady(features) {
 
   if (features.includes("viewport")) steadyViewport();
   if (features.includes("layout")) steadyLayout();
+  console.log("STEADY");
 }
+
+
+
+// Set some sensible default in case `ResizeObserver` doesn't exist.
+document.documentElement.style.setProperty("--ph", `calc(var(--vh) * 0.85)`);
+document.documentElement.style.setProperty("--th", `calc(var(--vh) * 0.65)`);
+document.documentElement.style.setProperty("--bh", `calc(var(--vh) * 0.65)`);
+document.documentElement.style.setProperty("--ih", `calc(var(--vh) * 0.50)`);
+
+const elements = {
+  "top-before": null,
+  "top-sticky": null,
+  "top-after": null,
+  "bottom-before": null,
+  "bottom-sticky": null,
+  "bottom-after": null
+};
+
+const resizeObserver = new ResizeObserver(_ => {
+  const heights = {
+    tb: elements["top-before"].offsetHeight,
+    ts: elements["top-sticky"].offsetHeight,
+    ta: elements["top-after"].offsetHeight,
+    bb: elements["bottom-before"].offsetHeight,
+    bs: elements["bottom-sticky"].offsetHeight,
+    ba: elements["bottom-after"].offsetHeight
+  };
+
+  document.documentElement.style.setProperty("--top-before", `${heights.tb}px`);
+  document.documentElement.style.setProperty("--top-sticky", `${heights.ts}px`);
+  document.documentElement.style.setProperty("--top-after", `${heights.ta}px`);
+  document.documentElement.style.setProperty("--bottom-before", `${heights.bb}px`);
+  document.documentElement.style.setProperty("--bottom-sticky", `${heights.bs}px`);
+  document.documentElement.style.setProperty("--bottom-after", `${heights.ba}px`);
+
+  const b = heights.tb + heights.ta;
+  const s = heights.ts + heights.bs;
+  const a = heights.bb + heights.ba;
+  document.documentElement.style.setProperty("--ph", `calc(var(--vh) - ${s}px)`);
+  document.documentElement.style.setProperty("--th", `calc(var(--vh) - ${b}px - ${s}px)`);
+  document.documentElement.style.setProperty("--bh", `calc(var(--vh) - ${s}px - ${a}px)`);
+  document.documentElement.style.setProperty("--ih", `calc(var(--vh) - ${b}px - ${s}px - ${a}px)`)
+});
+
+const mutationObserver = new MutationObserver(records => {
+  records.forEach(record => {
+    record.addedNodes.forEach(node => {
+      if (node.id in elements) elements[node.id] = node;
+      if (Object.keys(elements).filter(_ => elements[_]).length < 6) return;
+      Object.keys(elements).forEach(_ => resizeObserver.observe(elements[_]));
+      mutationObserver.disconnect();
+    });
+  });
+})
+
+mutationObserver.observe(document.documentElement, {
+  childList: true,
+  subtree: true
+});
+

@@ -66,6 +66,9 @@ export async function render(pageContext: PageContext) {
         <title>${title}Omelette</title>
         <link rel="icon" href="/favicon.png">
 
+        <script src="/hover.js"></script>
+        <script src="/viewport.js"></script>
+
       </head>
       <body>
 
