@@ -1,0 +1,22 @@
+html {
+  scroll-behavior: smooth;
+}
+
+#top-sticky,
+#bottom-sticky {
+  position: sticky;
+  z-index: 100;
+}
+
+#top-sticky {
+  top: 0;
+}
+
+#bottom-sticky {
+  bottom: 0;
+}
+
+#page {
+  position: relative;
+  z-index: 0;
+}

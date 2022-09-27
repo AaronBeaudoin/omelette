@@ -1,7 +1,3 @@
-html, body {
-  height: 100%;
-}
-
 .markdown-body p:not(:first-child),
 .markdown-body ul:not(:first-child),
 .markdown-body ol:not(:first-child) {
