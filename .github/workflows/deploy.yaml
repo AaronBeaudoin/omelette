@@ -20,8 +20,9 @@ jobs:
 
   deploy:
     name: Deploy
+    needs: [secrets]
     runs-on: ubuntu-latest
-    if: ${{ !needs.secrets.outputs.exists }}
+    if: ${{ needs.secrets.outputs.exists == 'EXISTS' }}
     steps:
 
       - name: 1. Checkout Repository
